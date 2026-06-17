@@ -1,21 +1,1216 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Courses</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S. Anusha | Assistant Professor — ANITS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════
+   DESIGN TOKENS
+   Palette: Deep navy #0F2044, Teal accent #0E8A7B,
+   Warm gold #C9913D, Light bg #F5F7FA, Surface #FFFFFF
+════════════════════════════════════ */
+:root {
+  --navy:      #0F2044;
+  --navy-mid:  #1A3366;
+  --teal:      #0E8A7B;
+  --teal-lt:   #E6F4F2;
+  --teal-bd:   #7ECFC7;
+  --gold:      #C9913D;
+  --gold-lt:   #FDF5E8;
+  --gold-bd:   #E8C07A;
+  --bg:        #F5F7FA;
+  --surface:   #FFFFFF;
+  --surface2:  #EEF1F8;
+  --border:    #D8DDE8;
+  --text:      #1C2340;
+  --muted:     #6B7280;
+  --correct:   #0E8A7B;
+  --correct-bg:#E6F4F2;
+  --correct-bd:#7ECFC7;
+  --wrong:     #C0392B;
+  --wrong-bg:  #FDECEA;
+  --wrong-bd:  #F1A9A0;
+  --radius:    12px;
+  --shadow:    0 2px 16px rgba(15,32,68,.08);
+  --shadow-md: 0 6px 28px rgba(15,32,68,.12);
+  --shadow-lg: 0 12px 48px rgba(15,32,68,.16);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ════════════════════════════════════
+   TOP HEADER BAR
+════════════════════════════════════ */
+.inst-bar {
+  background: var(--navy);
+  padding: 9px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.inst-bar-left {
+  display: flex; align-items: center; gap: 12px;
+}
+.inst-logo {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--teal), #0a6b5e);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.inst-name {
+  color: #fff; font-size: 13px; font-weight: 600; line-height: 1.3;
+}
+.inst-name small {
+  display: block; font-weight: 300; font-size: 11px; opacity: .75;
+}
+.live-clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: rgba(255,255,255,.7);
+  letter-spacing: .5px;
+}
+
+/* ════════════════════════════════════
+   NAV
+════════════════════════════════════ */
+nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; align-items: center; gap: 4px;
+  height: 50px;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: var(--shadow);
+}
+nav a {
+  text-decoration: none; color: var(--muted);
+  font-size: 13px; font-weight: 500;
+  padding: 6px 14px; border-radius: 8px;
+  transition: all .18s; white-space: nowrap;
+}
+nav a:hover { background: var(--surface2); color: var(--navy); }
+nav a.active { background: var(--teal-lt); color: var(--teal); font-weight: 600; }
+.nav-spacer { flex: 1; }
+.nav-sem-badge {
+  background: var(--gold-lt); color: var(--gold);
+  border: 1px solid var(--gold-bd);
+  font-size: 11px; font-weight: 600;
+  padding: 4px 12px; border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════════
+   HERO / PROFILE
+════════════════════════════════════ */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e3d70 100%);
+  padding: 56px 40px 0;
+  position: relative; overflow: hidden;
+}
+/* Subtle geometric accent — the signature element */
+.hero::before {
+  content: '';
+  position: absolute;
+  right: -80px; top: -80px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14,138,123,.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  left: 30%; bottom: 0;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(14,138,123,.5), transparent);
+}
+
+.hero-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 36px; align-items: flex-end;
+  padding-bottom: 0;
+}
+
+/* Avatar */
+.avatar-wrap { position: relative; padding-bottom: 32px; }
+.avatar {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: linear-gradient(145deg, var(--teal), #0a6b5e);
+  border: 4px solid rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 42px; color: #fff; font-weight: 700;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  position: relative; z-index: 1;
+  flex-shrink: 0;
+}
+.avatar-ring {
+  position: absolute; inset: -8px;
+  border-radius: 50%;
+  border: 2px dashed rgba(14,138,123,.4);
+  animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.status-dot {
+  position: absolute; bottom: 40px; right: 4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #22c55e;
+  border: 3px solid var(--navy);
+  z-index: 2;
+}
+
+/* Profile text */
+.profile-text { padding-bottom: 36px; }
+.dept-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(14,138,123,.18); color: var(--teal-bd);
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 4px 14px;
+  border-radius: 40px; margin-bottom: 14px;
+  border: 1px solid rgba(14,138,123,.3);
+}
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 4vw, 50px);
+  color: #fff; line-height: 1.1; margin-bottom: 8px;
+}
+.hero-name span { color: var(--teal-bd); font-style: italic; }
+.hero-role {
+  font-size: 15px; color: rgba(255,255,255,.75);
+  font-weight: 400; margin-bottom: 20px;
+}
+.hero-role strong { color: rgba(255,255,255,.95); font-weight: 600; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.hchip {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.82);
+  font-size: 12px; padding: 5px 13px;
+  border-radius: 40px; font-weight: 400;
+}
+
+/* Stats column */
+.hero-stats {
+  display: flex; flex-direction: column; gap: 12px;
+  padding-bottom: 36px;
+}
+.hstat {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px; padding: 14px 20px;
+  text-align: center; min-width: 120px;
+}
+.hstat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px; color: var(--teal-bd);
+  display: block; line-height: 1;
+}
+.hstat-lbl {
+  font-size: 10.5px; color: rgba(255,255,255,.55);
+  text-transform: uppercase; letter-spacing: .8px;
+  margin-top: 3px;
+}
+
+/* Tabs */
+.hero-tabs {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; gap: 0; padding-top: 20px;
+}
+.hero-tab {
+  padding: 12px 22px;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,.55);
+  cursor: pointer; border-bottom: 3px solid transparent;
+  transition: all .2s; white-space: nowrap;
+  border-radius: 8px 8px 0 0;
+}
+.hero-tab:hover { color: rgba(255,255,255,.85); }
+.hero-tab.active {
+  color: var(--teal-bd); border-bottom-color: var(--teal);
+  background: rgba(14,138,123,.1);
+}
+
+/* ════════════════════════════════════
+   TAB PANELS
+════════════════════════════════════ */
+.tab-section {
+  max-width: 1100px; margin: 0 auto;
+  padding: 40px 40px 60px;
+}
+.tab-panel { display: none; animation: fadeUp .3s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Section heading inside tab */
+.tab-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; color: var(--navy);
+  margin-bottom: 6px;
+}
+.tab-section-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+/* ════════════════════════════════════
+   AI TABLE  (Topic | Quiz)
+════════════════════════════════════ */
+.ai-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.ai-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Column header */
+.ai-table thead th {
+  padding: 14px 22px;
+  text-align: left;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .7px;
+  color: #fff;
+}
+.ai-table thead th:first-child {
+  background: var(--navy);
+  width: 54%;
+}
+.ai-table thead th:last-child {
+  background: var(--teal);
+  width: 46%;
+}
+
+/* Topic rows */
+.ai-table tbody tr { border-top: 1px solid var(--border); }
+.ai-table tbody tr:hover td { background: var(--surface2); }
+
+.topic-cell {
+  padding: 0;
+  vertical-align: top;
+}
+.topic-btn {
+  width: 100%; text-align: left;
+  padding: 16px 22px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  display: flex; align-items: center; gap: 12px;
+  transition: background .15s;
+}
+.topic-btn:hover { background: #EEF1F8; }
+.topic-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); color: #fff;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.topic-info { flex: 1; }
+.topic-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.topic-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.ttag {
+  font-size: 10px; font-weight: 600;
+  background: var(--teal-lt); color: var(--teal);
+  padding: 2px 7px; border-radius: 10px;
+}
+.topic-chevron {
+  font-size: 12px; color: var(--muted);
+  transition: transform .25s;
+  flex-shrink: 0;
+}
+.topic-btn.open .topic-chevron { transform: rotate(90deg); color: var(--teal); }
+
+/* Expanded topic content */
+.topic-expand {
+  display: none;
+  padding: 0 22px 16px 62px;
+  font-size: 13px; color: var(--muted);
+  line-height: 1.7;
+  background: var(--surface);
+}
+.topic-expand.open { display: block; animation: fadeUp .25s ease; }
+.topic-expand p { margin-bottom: 8px; }
+.topic-expand strong { color: var(--text); }
+
+/* Quiz cell */
+.quiz-cell {
+  padding: 14px 18px;
+  vertical-align: top;
+  border-left: 1px solid var(--border);
+}
+.quiz-launch-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--teal), #0a6b5e);
+  color: #fff; border: none; border-radius: 8px;
+  padding: 9px 18px; font-size: 12.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer;
+  box-shadow: 0 3px 12px rgba(14,138,123,.28);
+  transition: all .18s; white-space: nowrap;
+}
+.quiz-launch-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(14,138,123,.36); }
+.quiz-launch-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.quiz-done-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--correct-bg); color: var(--correct);
+  border: 1px solid var(--correct-bd);
+  font-size: 12px; font-weight: 600;
+  padding: 6px 12px; border-radius: 8px;
+}
+.retry-link {
+  font-size: 11px; color: var(--muted); text-decoration: underline;
+  cursor: pointer; display: block; margin-top: 4px;
+  background: none; border: none; font-family: 'Inter', sans-serif;
+}
+.retry-link:hover { color: var(--teal); }
+
+/* ════════════════════════════════════
+   QUIZ MODAL
+════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(10,18,40,.6);
+  backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--surface);
+  border-radius: 18px;
+  width: 100%; max-width: 560px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: scaleIn .25s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Modal header */
+.modal-head {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  padding: 20px 24px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.modal-head-left h3 {
+  color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 3px;
+}
+.modal-head-left p { color: rgba(255,255,255,.6); font-size: 12px; }
+.modal-close {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.12); border: none;
+  color: #fff; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .15s;
+}
+.modal-close:hover { background: rgba(255,255,255,.22); }
+
+/* Timer bar */
+.modal-timer-bar {
+  height: 4px; background: var(--surface2);
+}
+.modal-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), #0a6b5e);
+  transition: width 1s linear, background .4s;
+}
+
+/* Modal body */
+.modal-body { padding: 24px; }
+
+/* Progress dots */
+.q-dots { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.q-dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface2); border: 2px solid var(--border);
+  font-size: 10px; font-weight: 700; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .2s;
+}
+.q-dot.cur { border-color: var(--teal); background: var(--teal); color: #fff; }
+.q-dot.ok  { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+.q-dot.bad { border-color: var(--wrong); background: var(--wrong-bg); color: var(--wrong); }
+
+.q-meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.q-label {
+  font-size: 11px; font-weight: 600; color: var(--teal);
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.q-timer-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 600; color: var(--muted);
+}
+.q-timer-num.warn { color: var(--gold); }
+.q-timer-num.danger { color: var(--wrong); animation: pulse .6s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+.modal-q-text {
+  font-size: 15px; font-weight: 600;
+  color: var(--text); line-height: 1.55; margin-bottom: 18px;
+}
+
+/* Options */
+.modal-opts { display: grid; gap: 9px; margin-bottom: 14px; }
+.modal-opt {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 11px 15px; border: 1.8px solid var(--border);
+  border-radius: 10px; cursor: pointer; background: var(--bg);
+  font-size: 13.5px; transition: all .15s; user-select: none;
+}
+.modal-opt:hover:not(.locked) { border-color: var(--teal); background: var(--teal-lt); transform: translateX(3px); }
+.modal-opt.selected:not(.locked) { border-color: var(--teal); background: var(--teal-lt); }
+.modal-opt.correct { border-color: var(--correct-bd); background: var(--correct-bg); }
+.modal-opt.wrong   { border-color: var(--wrong-bd);   background: var(--wrong-bg);   }
+.modal-opt.locked  { cursor: default; }
+.opt-k {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--surface2); border: 1.5px solid var(--border);
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .15s;
+}
+.modal-opt.correct .opt-k { background: var(--correct); border-color: var(--correct); color: #fff; }
+.modal-opt.wrong   .opt-k { background: var(--wrong);   border-color: var(--wrong);   color: #fff; }
+.modal-opt.selected:not(.locked):not(.correct):not(.wrong) .opt-k {
+  background: var(--teal); border-color: var(--teal); color: #fff;
+}
+
+/* Explanation */
+.modal-exp {
+  display: none; border-radius: 9px;
+  padding: 11px 14px; font-size: 12.5px; line-height: 1.65;
+  margin-bottom: 14px; animation: fadeUp .25s ease;
+}
+.modal-exp.open { display: block; }
+.modal-exp.c { background: var(--correct-bg); border: 1px solid var(--correct-bd); color: #065f46; }
+.modal-exp.w { background: var(--wrong-bg); border: 1px solid var(--wrong-bd); color: #7f1d1d; }
+
+/* Nav buttons */
+.modal-nav { display: flex; justify-content: flex-end; gap: 8px; }
+.mbtn {
+  padding: 9px 20px; border-radius: 9px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: all .15s;
+}
+.mbtn-next {
+  background: linear-gradient(135deg, var(--teal), #0a6b5e);
+  color: #fff; box-shadow: 0 3px 12px rgba(14,138,123,.25);
+}
+.mbtn-next:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(14,138,123,.32); }
+.mbtn-next { display: none; }
+.mbtn-next.show { display: block; }
+
+/* Score result inside modal */
+.score-result {
+  text-align: center; padding: 10px 0 6px;
+  animation: fadeUp .35s ease;
+}
+.score-ring {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: var(--shadow-md);
+}
+.score-ring span {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; color: #fff; line-height: 1;
+}
+.score-result h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; margin-bottom: 6px; color: var(--navy);
+}
+.score-result p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+.score-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.sbtn-retry {
+  padding: 10px 24px; border-radius: 9px;
+  background: var(--teal); color: #fff; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all .15s;
+}
+.sbtn-retry:hover { background: #0a6b5e; }
+.sbtn-close {
+  padding: 10px 24px; border-radius: 9px;
+  background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all .15s;
+}
+.sbtn-close:hover { background: #e0e4ee; }
+
+/* ════════════════════════════════════
+   INFO TAB  (About / Details)
+════════════════════════════════════ */
+.info-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow);
+}
+.info-card-head {
+  background: var(--navy);
+  padding: 12px 20px;
+  color: #fff; font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.info-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.info-table td { padding: 10px 18px; border-top: 1px solid var(--border); vertical-align: top; }
+.info-table td:first-child {
+  font-weight: 600; font-size: 11.5px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .4px;
+  background: var(--surface2); width: 38%;
+}
+.info-table tr:hover td { background: #EEF1F8; }
+.info-table tr:hover td:first-child { background: #E4E9F4; }
+
+/* ════════════════════════════════════
+   FOOTER
+════════════════════════════════════ */
+footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.55);
+  text-align: center; padding: 24px 40px;
+  font-size: 12.5px;
+}
+footer span { color: var(--teal-bd); }
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hero { padding: 36px 20px 0; }
+  .hero-inner { grid-template-columns: auto 1fr; gap: 20px; }
+  .hero-stats { display: none; }
+  .tab-section { padding: 28px 16px 48px; }
+  .info-grid { grid-template-columns: 1fr; }
+  nav { padding: 0 16px; }
+  .inst-bar { padding: 8px 16px; }
+}
+@media (max-width: 540px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .avatar-wrap { padding-bottom: 0; }
+  .ai-table thead th:last-child { display: none; }
+}
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body>
 
-    <h1>My Courses</h1>
+<!-- ══════════════════════════════════════
+     INSTITUTION BAR
+══════════════════════════════════════ -->
+<div class="inst-bar">
+  <div class="inst-bar-left">
+    <div class="inst-logo">A</div>
+    <div class="inst-name">
+      Anil Neerukonda Institute of Technology & Sciences
+      <small>ANITS — Visakhapatnam, Andhra Pradesh</small>
+    </div>
+  </div>
+  <div class="live-clock" id="liveClock"></div>
+</div>
 
-    <ul>
-        <li>Artificial Intelligence</li>
-        <li>Machine Learning</li>
-        <li>Database Management Systems</li>
-        <li>Computer Networks</li>
-        <li>Operating Systems</li>
-    </ul>
-    <a href="artificial_intelligence_guide.html">ai notes</a>
-    <a href="ai_quiz">ai quiz</a>
+<!-- ══════════════════════════════════════
+     NAV
+══════════════════════════════════════ -->
+<nav>
+  <a href="#" class="active" onclick="switchTab('ai',this)">🤖 AI Course</a>
+  <a href="#" onclick="switchTab('info',this)">👩‍🏫 Profile</a>
+  <div class="nav-spacer"></div>
+  <div class="nav-sem-badge">📅 Semester — Even 2024–25</div>
+</nav>
 
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+
+    <!-- Avatar -->
+    <div class="avatar-wrap reveal">
+      <div class="avatar">
+        SA
+        <div class="avatar-ring"></div>
+      </div>
+      <div class="status-dot" title="Active"></div>
+    </div>
+
+    <!-- Profile text -->
+    <div class="profile-text reveal">
+      <div class="dept-tag">🎓 Computer Science &amp; Engineering</div>
+      <h1 class="hero-name">S. <span>Anusha</span></h1>
+      <div class="hero-role">
+        <strong>Assistant Professor</strong> &nbsp;·&nbsp; ANITS, Visakhapatnam &nbsp;·&nbsp;
+        Working since <strong>December 2023</strong>
+      </div>
+      <div class="hero-chips">
+        <span class="hchip">🤖 Artificial Intelligence</span>
+        <span class="hchip">📊 Data Structures</span>
+        <span class="hchip">🐍 Python Programming</span>
+        <span class="hchip">🔬 Research Enthusiast</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-stats reveal">
+      <div class="hstat">
+        <span class="hstat-num" id="cntMonths">0</span>
+        <div class="hstat-lbl">Months of Service</div>
+      </div>
+      <div class="hstat">
+        <span class="hstat-num">11</span>
+        <div class="hstat-lbl">AI Topics</div>
+      </div>
+      <div class="hstat">
+        <span class="hstat-num">1</span>
+        <div class="hstat-lbl">Current Subject</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tab switcher -->
+  <div class="hero-tabs">
+    <div class="hero-tab active" id="htab-ai" onclick="switchTab('ai',null)">🤖 Artificial Intelligence</div>
+    <div class="hero-tab" id="htab-info" onclick="switchTab('info',null)">👩‍🏫 Faculty Profile</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB CONTENT
+══════════════════════════════════════ -->
+<div style="background:var(--bg); border-top:3px solid var(--teal);">
+<div class="tab-section">
+
+  <!-- ─── AI TAB ─── -->
+  <div class="tab-panel active" id="panel-ai">
+    <div class="reveal">
+      <div class="tab-section-title">Artificial Intelligence — Course Content &amp; Quiz</div>
+      <div class="tab-section-sub">Current semester subject · Click any topic to expand · Launch a quiz to test understanding</div>
+    </div>
+
+    <div class="ai-table-wrap reveal">
+      <table class="ai-table" id="aiTable">
+        <thead>
+          <tr>
+            <th>📖 Topic</th>
+            <th>✏️ Quiz</th>
+          </tr>
+        </thead>
+        <tbody id="aiTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── INFO TAB ─── -->
+  <div class="tab-panel" id="panel-info">
+    <div class="reveal">
+      <div class="tab-section-title">Faculty Profile</div>
+      <div class="tab-section-sub">Personal and academic details</div>
+    </div>
+    <div class="info-grid reveal">
+      <div class="info-card">
+        <div class="info-card-head">👩‍🏫 Personal Information</div>
+        <table class="info-table">
+          <tr><td>Full Name</td><td>S. Anusha</td></tr>
+          <tr><td>Designation</td><td>Assistant Professor</td></tr>
+          <tr><td>Department</td><td>Computer Science &amp; Engineering</td></tr>
+          <tr><td>Institution</td><td>ANITS, Visakhapatnam</td></tr>
+          <tr><td>Joined</td><td>December 2023</td></tr>
+          <tr><td>Qualification</td><td>M.Tech — Computer Science</td></tr>
+          <tr><td>Specialisation</td><td>Artificial Intelligence &amp; ML</td></tr>
+        </table>
+      </div>
+      <div class="info-card">
+        <div class="info-card-head">📚 Teaching Details</div>
+        <table class="info-table">
+          <tr><td>Current Subject</td><td><strong style="color:var(--teal)">Artificial Intelligence</strong></td></tr>
+          <tr><td>Semester</td><td>Even Sem 2024–25</td></tr>
+          <tr><td>Topics Covered</td><td>11 Units</td></tr>
+          <tr><td>Course Code</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px">CSE3501</code></td></tr>
+          <tr><td>Class</td><td>III Year B.Tech (CSE)</td></tr>
+          <tr><td>Mode</td><td>Offline / Classroom</td></tr>
+          <tr><td>Status</td><td><span style="color:var(--teal);font-weight:600">● Active</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     QUIZ MODAL
+══════════════════════════════════════ -->
+<div class="modal-overlay" id="quizModal" onclick="modalOverlayClick(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <h3 id="modalTitle">Quiz</h3>
+        <p id="modalSub">Artificial Intelligence</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-timer-bar">
+      <div class="modal-timer-fill" id="modalTimerFill"></div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <p>
+    <span>S. Anusha</span> &nbsp;·&nbsp; Assistant Professor, CSE &nbsp;·&nbsp;
+    Anil Neerukonda Institute of Technology &amp; Sciences, Visakhapatnam
+  </p>
+  <p style="margin-top:4px; font-size:11px; opacity:.5">© 2024–25 Academic Portal</p>
+</footer>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────
+   DATA
+───────────────────────────────────── */
+const TOPICS = [
+  {
+    name: "Foundations of Artificial Intelligence",
+    tags: ["Definition", "Turing Test", "AI Goals"],
+    detail: `<p>AI is the science and engineering of making intelligent machines. <strong>Four orientations</strong> define the field: Think Humanly, Act Humanly, Think Rationally, and Act Rationally. Alan Turing's 1950 paper proposed a conversational test for machine intelligence. AI draws from mathematics, philosophy, neuroscience, linguistics, and computer science.</p>`,
+    qs: [
+      { q:"Who proposed the Turing Test?", opts:["John McCarthy","Alan Turing","Marvin Minsky","Claude Shannon"], ans:1, exp:"Alan Turing proposed the 'imitation game' in his 1950 paper 'Computing Machinery and Intelligence', which became the foundation of the Turing Test." },
+      { q:"Which of these is NOT one of the four AI orientations defined by Russell & Norvig?", opts:["Acting rationally","Thinking humanly","Computing maximally","Acting humanly"], ans:2, exp:"The four orientations are: Think Humanly, Act Humanly, Think Rationally, and Act Rationally. 'Computing maximally' is not among them." },
+      { q:"Which year was the term 'Artificial Intelligence' coined?", opts:["1943","1950","1956","1969"], ans:2, exp:"John McCarthy coined the term 'Artificial Intelligence' at the Dartmouth Conference in 1956, which marks the official birth of AI as an academic field." }
+    ]
+  },
+  {
+    name: "History of Artificial Intelligence",
+    tags: ["Timeline", "AI Winters", "Milestones"],
+    detail: `<p><strong>1943</strong> – McCulloch & Pitts propose the first mathematical neuron model. <strong>1956</strong> – Dartmouth Conference officially births AI. <strong>1974–1980 & 1987–1993</strong> – Two AI Winters due to unmet expectations. <strong>1997</strong> – Deep Blue defeats Kasparov. <strong>2012</strong> – AlexNet triggers the deep learning revolution. <strong>2020</strong> – AlphaFold solves the protein folding problem.</p>`,
+    qs: [
+      { q:"What triggered the first AI Winter in the mid-1970s?", opts:["Computer viruses","Unrealised promises and funding cuts","Lack of programming languages","Invention of the internet"], ans:1, exp:"The first AI Winter resulted from overhyped expectations, combinatorial explosion problems, hardware limitations, and the Lighthill Report — all leading to major funding cuts." },
+      { q:"Which AI system defeated chess world champion Garry Kasparov in 1997?", opts:["AlphaGo","Watson","Stockfish","Deep Blue"], ans:3, exp:"IBM's Deep Blue defeated Garry Kasparov in a 6-game match in 1997, becoming the first computer to beat a reigning world chess champion under standard conditions." },
+      { q:"AlexNet winning the ImageNet competition in 2012 marked the rise of:", opts:["Expert Systems","Deep Learning","Genetic Algorithms","Logic Programming"], ans:1, exp:"AlexNet's decisive ImageNet victory in 2012, designed by Hinton's team, demonstrated that deep convolutional neural networks could dramatically outperform traditional methods, igniting the modern deep learning era." }
+    ]
+  },
+  {
+    name: "Intelligent Agents & Environments",
+    tags: ["Sensors", "Actuators", "Percept"],
+    detail: `<p>An <strong>agent</strong> perceives its environment via <strong>sensors</strong> and acts via <strong>actuators</strong>. The <strong>percept sequence</strong> is the agent's complete sensory history. The <strong>agent function</strong> maps any percept sequence to an action; the <strong>agent program</strong> is its software implementation. PEAS = Performance, Environment, Actuators, Sensors.</p>`,
+    qs: [
+      { q:"An agent perceives its environment through _____ and acts through _____.", opts:["Actuators; sensors","Sensors; actuators","Memory; processors","Inputs; outputs"], ans:1, exp:"By definition, sensors gather percepts from the environment and actuators perform actions upon it. This is the fundamental agent–environment interaction model." },
+      { q:"The complete history of all inputs an agent has received is called:", opts:["Agent program","State space","Percept sequence","Working memory"], ans:2, exp:"A percept is a single sensory input. The percept sequence is the ordered history of all percepts received. The agent function maps this full sequence to an action." },
+      { q:"PEAS stands for:", opts:["Planning, Execution, Action, State","Performance, Environment, Actuators, Sensors","Percept, Evaluation, Agent, Search","Problem, Entity, Analysis, Solution"], ans:1, exp:"PEAS is the framework for defining an agent's task environment: Performance measure, Environment, Actuators, and Sensors — the starting point for any agent design." }
+    ]
+  },
+  {
+    name: "The Concept of Rationality",
+    tags: ["Rational Agent", "Performance", "Omniscience"],
+    detail: `<p>A <strong>rational agent</strong> selects actions that maximise <em>expected performance</em> given its percepts and knowledge. Rationality ≠ omniscience. An <strong>omniscient</strong> agent knows actual outcomes; a rational agent only maximises expected outcomes. Four factors determine rationality: performance measure, prior knowledge, available actions, and percept sequence.</p>`,
+    qs: [
+      { q:"A rational agent is one that:", opts:["Always achieves the best possible outcome","Has complete knowledge of the world","Maximises expected performance given percepts and knowledge","Mimics human behaviour exactly"], ans:2, exp:"Rationality means doing the best with what you know — maximising expected performance. It does NOT require omniscience (complete information) or human-like behaviour." },
+      { q:"Which correctly distinguishes rationality from omniscience?", opts:["They are the same","Omniscience knows actual outcomes; rationality maximises expected outcomes","Rationality requires perfect memory","Omniscience is achievable; rationality is not"], ans:1, exp:"An omniscient agent knows the actual result of every action in advance — impossible in the real world. A rational agent acts on expected outcomes given available information, which is achievable." },
+      { q:"Which of the following is NOT a factor that determines a rational action?", opts:["Performance measure","Percept sequence","Agent's physical size","Available actions"], ans:2, exp:"The four factors are: performance measure, prior knowledge, available actions, and percept sequence. Physical size is irrelevant to the definition of rational action." }
+    ]
+  },
+  {
+    name: "Nature of Environments",
+    tags: ["Observable", "Stochastic", "Episodic", "PEAS"],
+    detail: `<p>Environments are classified along six axes: <strong>Fully vs Partially Observable</strong> (sensor coverage), <strong>Single vs Multi-Agent</strong> (one or many agents), <strong>Deterministic vs Stochastic</strong> (outcome certainty), <strong>Episodic vs Sequential</strong> (independence of decisions), <strong>Static vs Dynamic</strong> (change during deliberation), and <strong>Discrete vs Continuous</strong> (state granularity).</p>`,
+    qs: [
+      { q:"Chess is best described as which type of environment?", opts:["Partially observable, stochastic, episodic","Fully observable, deterministic, sequential, multi-agent","Fully observable, stochastic, single-agent","Partially observable, deterministic, sequential"], ans:1, exp:"Chess is fully observable (entire board visible), deterministic (moves have certain outcomes), sequential (each move affects future states), and multi-agent (two competing players)." },
+      { q:"A poker-playing AI faces which observability?", opts:["Fully observable","Partially observable","Completely deterministic","Episodic"], ans:1, exp:"Poker is partially observable because the agent cannot see opponents' hidden cards. The hidden information makes it a classic partially observable environment." },
+      { q:"An environment that does NOT change while the agent deliberates is called:", opts:["Continuous","Stochastic","Static","Episodic"], ans:2, exp:"A static environment is unchanged during the agent's decision-making. A dynamic environment (e.g., driving a car) changes even while the agent thinks. Crossword puzzles are static; real-time trading is dynamic." }
+    ]
+  },
+  {
+    name: "Structure of Agents",
+    tags: ["Reflex", "Goal-Based", "Utility", "Learning"],
+    detail: `<p>Five canonical agent types: <strong>(1) Simple Reflex</strong> — condition-action rules, no memory. <strong>(2) Model-Based Reflex</strong> — internal world model for partial observability. <strong>(3) Goal-Based</strong> — plans action sequences to reach goal states. <strong>(4) Utility-Based</strong> — numeric utility function for tradeoffs. <strong>(5) Learning Agent</strong> — critic + learning element + problem generator improves over time.</p>`,
+    qs: [
+      { q:"Which agent type maintains an internal world model to handle partial observability?", opts:["Simple reflex agent","Model-based reflex agent","Goal-based agent","Utility-based agent"], ans:1, exp:"A model-based reflex agent tracks the parts of the world it cannot currently sense by maintaining an internal state updated with every percept. A simple reflex agent has no memory at all." },
+      { q:"A utility-based agent differs from a goal-based agent because it:", opts:["Uses sensors instead of actuators","Assigns numeric value to states for tradeoff decisions","Has no world knowledge","Only works in static environments"], ans:1, exp:"A utility function assigns a numeric value to states, allowing the agent to balance competing goals and uncertain outcomes. A goal-based agent simply checks if a goal state has been reached." },
+      { q:"The Critic in a learning agent is responsible for:", opts:["Generating new exploratory actions","Evaluating performance against an external standard","Choosing the next action to take","Storing all percept sequences"], ans:1, exp:"The Critic compares the agent's performance to the performance standard and feeds back signals to the Learning element. Without the critic, the learning element has no basis for improvement." }
+    ]
+  },
+  {
+    name: "Problem Solving Agents & Formulation",
+    tags: ["5 Components", "State Space", "Toy Problems"],
+    detail: `<p>A well-formed problem has <strong>5 components</strong>: Initial State, Actions (operators), Transition Model Result(s,a), Goal Test, and Path Cost. Classic toy problems: <strong>8-puzzle</strong> (181,440 states), <strong>8-Queens</strong>, <strong>Travelling Salesman</strong> (NP-hard), <strong>Route Finding</strong>. An optimal solution minimises total path cost.</p>`,
+    qs: [
+      { q:"What are the 5 components of a formally defined search problem?", opts:["Initial state, actions, transition model, goal test, path cost","Sensors, actuators, memory, goal, cost","State, rule, search, utility, action","Percept, model, plan, execute, learn"], ans:0, exp:"The five standard components are: (1) Initial State, (2) Actions, (3) Transition Model Result(s,a), (4) Goal Test, and (5) Path Cost. These fully define any search problem." },
+      { q:"The 8-puzzle has approximately how many reachable states?", opts:["512","40,320","181,440","362,880"], ans:2, exp:"The 8-puzzle has 9 tiles, giving 9! = 362,880 permutations. Only half are reachable from any given start state, so the reachable state space is 9!/2 = 181,440." },
+      { q:"An optimal solution to a search problem is one that:", opts:["Reaches the goal first","Minimises total path cost","Uses the fewest operators","Requires the least memory"], ans:1, exp:"An optimal solution minimises the total path cost — not just any sequence of actions that reaches the goal, but the least-cost one among all solutions." }
+    ]
+  },
+  {
+    name: "AI Techniques & Search Strategies",
+    tags: ["BFS", "DFS", "A*", "Heuristics"],
+    detail: `<p><strong>Uninformed:</strong> BFS (complete, optimal, O(bᵈ) space), DFS (memory-efficient, not optimal), IDS (best of both). <strong>Informed:</strong> Greedy f(n)=h(n); A* f(n)=g(n)+h(n) — optimal when h is <em>admissible</em> (never overestimates). Local: Hill Climbing, Simulated Annealing, Genetic Algorithms.</p>`,
+    qs: [
+      { q:"A* search uses f(n) = g(n) + h(n). What does g(n) represent?", opts:["Estimated cost from n to goal","Actual cost from start to n","Branching factor at n","Depth of n in search tree"], ans:1, exp:"g(n) is the actual known cost from the start node to node n. h(n) is the heuristic estimate from n to the goal. f(n) = g(n)+h(n) estimates the total solution cost through n." },
+      { q:"A* guarantees an optimal solution when the heuristic h(n) is:", opts:["Consistent and overestimates","Admissible — never overestimates the true cost","Always zero","Greater than g(n)"], ans:1, exp:"An admissible heuristic satisfies h(n) ≤ h*(n) for all n, never overestimating the true remaining cost. This property guarantees A* will not bypass any optimal path." },
+      { q:"Which search strategy combines the space efficiency of DFS with the completeness of BFS?", opts:["Uniform Cost Search","Bidirectional Search","Iterative Deepening DFS","Greedy Best-First"], ans:2, exp:"Iterative Deepening DFS (IDS) runs DFS with depth limits 0, 1, 2, … until the goal is found. It achieves BFS completeness and optimality but uses only O(bd) space like DFS." }
+    ]
+  },
+  {
+    name: "State Space Search",
+    tags: ["State Graph", "Local Search", "Hill Climbing"],
+    detail: `<p>A <strong>state space</strong> is a graph where nodes are world configurations and edges are operators. Performance metrics: completeness, optimality, time and space complexity. <strong>Local Search</strong>: Hill Climbing (fast but gets stuck in local maxima/plateaus), Simulated Annealing (probabilistic escapes), Genetic Algorithms (population + crossover + mutation).</p>`,
+    qs: [
+      { q:"Hill climbing can permanently get stuck in:", opts:["The goal state","Local maxima, plateaus, and ridges","A fully expanded node","A deterministic environment"], ans:1, exp:"Hill climbing has no backtracking. It can get stuck at local maxima (better than neighbours but not globally best), plateaus (flat regions), and ridges (narrow peaks where every step is downhill)." },
+      { q:"Simulated Annealing escapes local optima by:", opts:["Expanding all neighbours","Randomly restarting from a new state","Occasionally accepting worse states with probability e^(−ΔE/T)","Using a heuristic function"], ans:2, exp:"Simulated Annealing allows bad moves with probability e^(−ΔE/T). As temperature T decreases ('cooling'), bad moves become less likely. This probabilistic escape mechanism allows convergence to global optima." },
+      { q:"An admissible heuristic satisfies:", opts:["h(n) ≥ h*(n) always","h(n) = 0 always","h(n) ≤ h*(n) — never overestimates true cost","h(n) > g(n) always"], ans:2, exp:"An admissible heuristic never overestimates the true cost h*(n) to reach the goal. h(n) ≤ h*(n) for all nodes n. The straight-line distance in map navigation is a classic admissible heuristic." }
+    ]
+  },
+  {
+    name: "Production Systems",
+    tags: ["Rules", "Working Memory", "Forward/Backward Chaining"],
+    detail: `<p>A production system has three parts: <strong>(1) Production Memory</strong> — if-then rules; <strong>(2) Working Memory</strong> — current facts and state; <strong>(3) Inference Engine</strong> — match-select-act cycle. <strong>Forward chaining</strong>: data-driven (facts → conclusions). <strong>Backward chaining</strong>: goal-driven (goal → subgoals). Key property: modularity.</p>`,
+    qs: [
+      { q:"In a production system, Working Memory holds:", opts:["All if-then rules","Current facts, world state, and intermediate results","The conflict resolution strategy","The agent's long-term goals"], ans:1, exp:"Working Memory (global database) stores the current state of the world, known facts, and partial results. Production Memory holds the rules; the Inference Engine performs matching and firing." },
+      { q:"Forward chaining in a production system is:", opts:["Starting from goals and working backward","Starting from known facts and deriving new conclusions toward a goal","Selecting the highest-priority rule","Storing rules chronologically"], ans:1, exp:"Forward chaining is data-driven: begin with facts in working memory, fire rules whose conditions match, add new conclusions, and repeat until the goal is reached. Backward chaining is the opposite — goal-driven." },
+      { q:"What is the Recognize-Act cycle order in a production system?", opts:["Act → Match → Select → Repeat","Select → Match → Act → Repeat","Match → Select (conflict resolution) → Act → Repeat","Act → Select → Match → Repeat"], ans:2, exp:"The Recognize-Act cycle is: (1) Match — find all rules whose LHS conditions match working memory; (2) Select — conflict resolution picks one rule; (3) Act — execute the rule's RHS actions; then repeat." }
+    ]
+  },
+  {
+    name: "Applications of Artificial Intelligence",
+    tags: ["Healthcare", "NLP", "Robotics", "AlphaFold"],
+    detail: `<p>AI transforms real industries: <strong>Healthcare</strong> (medical imaging, drug discovery, AlphaFold protein folding), <strong>Autonomous Vehicles</strong> (Tesla, Waymo), <strong>NLP & LLMs</strong> (ChatGPT, translation), <strong>Finance</strong> (fraud detection, algorithmic trading), <strong>Recommendation Systems</strong> (Netflix, Spotify), <strong>Robotics</strong>, <strong>Creative AI</strong> (DALL·E, Midjourney), and <strong>Education</strong> (intelligent tutoring).</p>`,
+    qs: [
+      { q:"AlphaFold by DeepMind solved which major scientific challenge?", opts:["Autonomous vehicle navigation","Defeating humans at Go","Predicting 3D protein structure from amino acid sequences","Real-time speech translation"], ans:2, exp:"AlphaFold (2020–21) solved the 50-year protein folding problem, predicting a protein's 3D structure from its amino acid sequence with near-experimental accuracy, revolutionising biology and drug discovery." },
+      { q:"Which AI technique powers recommendation systems like Netflix and Spotify?", opts:["Backward chaining","Hill climbing","Collaborative filtering and deep learning","Depth-first search"], ans:2, exp:"Modern recommendation systems use collaborative filtering (user-item similarity) combined with deep learning to model complex user preferences and serve personalised content at massive scale." },
+      { q:"Which is a real-world example of a fully autonomous AI agent?", opts:["A spreadsheet formula","A self-driving car navigating city traffic","A search engine's index","A calculator app"], ans:1, exp:"A self-driving car is a real-world autonomous agent: it perceives via cameras/lidar (sensors), reasons about routes and obstacles, and acts via steering/braking (actuators) — all in a complex, dynamic environment." }
+    ]
+  }
+];
+
+/* ─────────────────────────────────────
+   BUILD TABLE
+───────────────────────────────────── */
+const quizState = {}; // topicIndex → {done, score}
+
+function buildTable() {
+  const tbody = document.getElementById('aiTableBody');
+  tbody.innerHTML = '';
+  TOPICS.forEach((t, i) => {
+    // Main row
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="topic-cell">
+        <button class="topic-btn" id="tbtn${i}" onclick="toggleTopic(${i})">
+          <div class="topic-num">${i + 1}</div>
+          <div class="topic-info">
+            <div class="topic-name">${t.name}</div>
+            <div class="topic-tags">${t.tags.map(g => `<span class="ttag">${g}</span>`).join('')}</div>
+          </div>
+          <span class="topic-chevron">▶</span>
+        </button>
+        <div class="topic-expand" id="texp${i}">${t.detail}</div>
+      </td>
+      <td class="quiz-cell" id="qcell${i}">
+        ${renderQuizCell(i)}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderQuizCell(i) {
+  const st = quizState[i];
+  if (st && st.done) {
+    const pct = Math.round(st.score / TOPICS[i].qs.length * 100);
+    const col = pct >= 70 ? 'var(--teal)' : 'var(--wrong)';
+    return `<div class="quiz-done-badge">✓ ${st.score}/${TOPICS[i].qs.length} · ${pct}%</div>
+            <button class="retry-link" onclick="launchQuiz(${i})">Retry quiz</button>`;
+  }
+  return `<button class="quiz-launch-btn" id="qlbtn${i}" onclick="launchQuiz(${i})">
+    ▶ Start Quiz <span style="opacity:.7;font-size:11px">${TOPICS[i].qs.length} Qs</span>
+  </button>`;
+}
+
+function toggleTopic(i) {
+  const exp = document.getElementById(`texp${i}`);
+  const btn = document.getElementById(`tbtn${i}`);
+  const isOpen = exp.classList.contains('open');
+  // close all
+  document.querySelectorAll('.topic-expand').forEach(e => e.classList.remove('open'));
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { exp.classList.add('open'); btn.classList.add('open'); }
+}
+
+/* ─────────────────────────────────────
+   QUIZ ENGINE
+───────────────────────────────────── */
+let activeQuizTopic = -1;
+let qIdx = 0, score = 0, answered = false;
+let userAnswers = [];
+let timerInt = null;
+const TIME_PER_Q = 45;
+let timeLeft = TIME_PER_Q;
+
+function launchQuiz(topicIdx) {
+  activeQuizTopic = topicIdx;
+  qIdx = 0; score = 0; answered = false;
+  userAnswers = new Array(TOPICS[topicIdx].qs.length).fill(null);
+  document.getElementById('modalTitle').textContent = TOPICS[topicIdx].name;
+  document.getElementById('modalSub').textContent = `${TOPICS[topicIdx].qs.length} questions · 45 seconds each`;
+  document.getElementById('quizModal').classList.add('open');
+  renderQuestion();
+}
+
+function closeModal() {
+  clearInterval(timerInt);
+  document.getElementById('quizModal').classList.remove('open');
+}
+
+function modalOverlayClick(e) {
+  if (e.target === document.getElementById('quizModal')) closeModal();
+}
+
+function renderQuestion() {
+  answered = userAnswers[qIdx] !== null;
+  const topic = TOPICS[activeQuizTopic];
+  const q = topic.qs[qIdx];
+
+  const dots = topic.qs.map((_, i) => {
+    let cls = '';
+    if (i === qIdx) cls = 'cur';
+    else if (userAnswers[i] !== null) cls = userAnswers[i] === topic.qs[i].ans ? 'ok' : 'bad';
+    return `<div class="q-dot ${cls}">${i + 1}</div>`;
+  }).join('');
+
+  const opts = q.opts.map((o, i) => {
+    let cls = '';
+    if (answered) {
+      cls = 'locked';
+      if (i === q.ans) cls += ' correct';
+      else if (i === userAnswers[qIdx] && i !== q.ans) cls += ' wrong';
+    }
+    return `<div class="modal-opt ${cls}" id="mopt${i}" onclick="pickAns(${i})">
+      <div class="opt-k">${['A','B','C','D'][i]}</div>
+      <div>${o}</div>
+    </div>`;
+  }).join('');
+
+  let expHTML = '';
+  if (answered && userAnswers[qIdx] !== null) {
+    const isC = userAnswers[qIdx] === q.ans;
+    expHTML = `<div class="modal-exp ${isC ? 'c' : 'w'} open">
+      ${isC ? '✅' : '❌'} <strong>${isC ? 'Correct!' : 'Incorrect.'}</strong>
+      ${!isC ? `Correct answer: <strong>"${q.opts[q.ans]}"</strong>. ` : ''}${q.exp}
+    </div>`;
+  }
+
+  const isLast = qIdx === topic.qs.length - 1;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="q-dots">${dots}</div>
+    <div class="q-meta-row">
+      <div class="q-label">Question ${qIdx + 1} of ${topic.qs.length}</div>
+      <div class="q-timer-num" id="qtNum">${TIME_PER_Q}s</div>
+    </div>
+    <div class="modal-q-text">${q.q}</div>
+    <div class="modal-opts">${opts}</div>
+    ${expHTML}
+    <div class="modal-nav">
+      <button class="mbtn mbtn-next ${answered ? 'show' : ''}" id="mNextBtn" onclick="nextQ()">
+        ${isLast ? 'See Results →' : 'Next →'}
+      </button>
+    </div>`;
+
+  // Timer
+  clearInterval(timerInt);
+  if (!answered) {
+    timeLeft = TIME_PER_Q;
+    updateTimerBar(1);
+    timerInt = setInterval(() => {
+      timeLeft--;
+      const ratio = timeLeft / TIME_PER_Q;
+      updateTimerBar(ratio);
+      const numEl = document.getElementById('qtNum');
+      if (numEl) {
+        numEl.textContent = timeLeft + 's';
+        numEl.className = 'q-timer-num' + (timeLeft <= 10 ? ' danger' : timeLeft <= 20 ? ' warn' : '');
+      }
+      if (timeLeft <= 0) { clearInterval(timerInt); onTimeout(); }
+    }, 1000);
+  } else {
+    updateTimerBar(0);
+  }
+}
+
+function updateTimerBar(ratio) {
+  const el = document.getElementById('modalTimerFill');
+  if (!el) return;
+  el.style.width = (ratio * 100) + '%';
+  el.style.background = ratio > .5
+    ? 'linear-gradient(90deg,var(--teal),#0a6b5e)'
+    : ratio > .25
+    ? 'linear-gradient(90deg,var(--gold),var(--teal))'
+    : 'var(--wrong)';
+}
+
+function onTimeout() {
+  if (answered) return;
+  answered = true;
+  const q = TOPICS[activeQuizTopic].qs[qIdx];
+  document.querySelectorAll('.modal-opt').forEach(o => o.classList.add('locked'));
+  const ca = document.getElementById(`mopt${q.ans}`);
+  if (ca) ca.classList.add('correct');
+  const exp = document.createElement('div');
+  exp.className = 'modal-exp w open';
+  exp.innerHTML = `⏰ <strong>Time's up!</strong> Correct answer: <strong>"${q.opts[q.ans]}"</strong>. ${q.exp}`;
+  const opts = document.querySelector('.modal-opts');
+  if (opts) opts.after(exp);
+  const nb = document.getElementById('mNextBtn');
+  if (nb) nb.classList.add('show');
+  updateTimerBar(0);
+}
+
+function pickAns(i) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInt);
+  const q = TOPICS[activeQuizTopic].qs[qIdx];
+  const isC = i === q.ans;
+  userAnswers[qIdx] = i;
+  if (isC) score++;
+  document.querySelectorAll('.modal-opt').forEach(o => o.classList.add('locked'));
+  document.getElementById(`mopt${q.ans}`).classList.add('correct');
+  if (!isC) document.getElementById(`mopt${i}`).classList.add('wrong');
+  const exp = document.createElement('div');
+  exp.className = `modal-exp ${isC ? 'c' : 'w'} open`;
+  exp.innerHTML = `${isC ? '✅' : '❌'} <strong>${isC ? 'Correct!' : 'Incorrect.'}</strong>
+    ${!isC ? `Correct answer: <strong>"${q.opts[q.ans]}"</strong>. ` : ''}${q.exp}`;
+  const opts = document.querySelector('.modal-opts');
+  if (opts) opts.after(exp);
+  const nb = document.getElementById('mNextBtn');
+  if (nb) nb.classList.add('show');
+  updateTimerBar(timeLeft / TIME_PER_Q);
+}
+
+function nextQ() {
+  const topic = TOPICS[activeQuizTopic];
+  if (qIdx < topic.qs.length - 1) {
+    qIdx++;
+    answered = userAnswers[qIdx] !== null;
+    renderQuestion();
+  } else {
+    showScore();
+  }
+}
+
+function showScore() {
+  clearInterval(timerInt);
+  const topic = TOPICS[activeQuizTopic];
+  const total = topic.qs.length;
+  const pct = Math.round(score / total * 100);
+  let emoji = '📖', title = 'Keep Practising', note = 'Review the topic and try again.';
+  if (pct === 100) { emoji = '🏆'; title = 'Perfect Score!'; note = 'Exceptional understanding!'; }
+  else if (pct >= 67) { emoji = '👍'; title = 'Well Done!'; note = 'Strong grasp — a couple to revisit.'; }
+  else if (pct >= 34) { emoji = '📘'; title = 'Getting There!'; note = 'Review the explanations above.'; }
+
+  quizState[activeQuizTopic] = { done: true, score };
+  const qcell = document.getElementById(`qcell${activeQuizTopic}`);
+  if (qcell) qcell.innerHTML = renderQuizCell(activeQuizTopic);
+  updateTimerBar(0);
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="score-result">
+      <div class="score-ring"><span>${score}/${total}</span></div>
+      <h3>${emoji} ${title}</h3>
+      <p>${note}<br><strong>${pct}% correct</strong></p>
+      <div class="score-actions">
+        <button class="sbtn-retry" onclick="launchQuiz(${activeQuizTopic})">🔄 Retry</button>
+        <button class="sbtn-close" onclick="closeModal()">✕ Close</button>
+      </div>
+    </div>`;
+}
+
+/* ─────────────────────────────────────
+   TAB SWITCHING
+───────────────────────────────────── */
+function switchTab(id, navEl) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.hero-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.getElementById('htab-' + id).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+}
+
+/* ─────────────────────────────────────
+   LIVE CLOCK
+───────────────────────────────────── */
+function updateClock() {
+  const now = new Date();
+  const d = now.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+  const t = now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  document.getElementById('liveClock').textContent = `${d}  ${t}`;
+}
+updateClock(); setInterval(updateClock, 1000);
+
+/* ─────────────────────────────────────
+   MONTHS COUNTER (Dec 2023 → now)
+───────────────────────────────────── */
+function calcMonths() {
+  const start = new Date(2023, 11, 1); // Dec 2023
+  const now = new Date();
+  return (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+}
+function animCount(el, target) {
+  let v = 0; const step = Math.ceil(target / 40);
+  const t = setInterval(() => {
+    v = Math.min(v + step, target);
+    el.textContent = v;
+    if (v >= target) clearInterval(t);
+  }, 35);
+}
+
+/* ─────────────────────────────────────
+   SCROLL REVEAL
+───────────────────────────────────── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─────────────────────────────────────
+   INIT
+───────────────────────────────────── */
+buildTable();
+animCount(document.getElementById('cntMonths'), calcMonths());
+</script>
 </body>
 </html>
