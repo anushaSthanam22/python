@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artificial Intelligence — A Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #F7F9FC;
+    --surface:   #FFFFFF;
+    --surface2:  #EEF3FA;
+    --accent:    #3A6CF4;
+    --accent2:   #7C3AED;
+    --accent3:   #0EA5C9;
+    --gold:      #F59E0B;
+    --text:      #1A1F36;
+    --muted:     #6B7280;
+    --border:    #DDE3F0;
+    --tag-bg:    #EEF3FA;
+    --tag-text:  #3A6CF4;
+    --radius:    14px;
+    --shadow:    0 2px 16px rgba(58,108,244,0.08);
+    --shadow-lg: 0 8px 40px rgba(58,108,244,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(247,249,252,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; gap: 24px;
+    height: 56px;
+    overflow-x: auto;
+  }
+  nav a {
+    text-decoration: none; color: var(--muted);
+    font-size: 13px; font-weight: 500;
+    white-space: nowrap;
+    transition: color .2s;
+  }
+  nav a:hover { color: var(--accent); }
+  nav .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px; color: var(--accent);
+    margin-right: 12px; flex-shrink: 0;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #EEF3FA 0%, #E8ECFF 50%, #F0F5FF 100%);
+    padding: 80px 48px 64px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(58,108,244,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 16px; border-radius: 40px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p {
+    max-width: 560px; margin: 0 auto 40px;
+    color: var(--muted); font-size: 16px;
+  }
+  .hero-chips {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  }
+  .hero-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 40px;
+    font-size: 12px; font-weight: 500; color: var(--text);
+    box-shadow: var(--shadow);
+  }
+  .brain-svg {
+    width: 64px; height: 64px;
+    margin: 0 auto 24px; display: block;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 56px 24px 80px; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 72px;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px; color: var(--text);
+  }
+  .section-subtitle {
+    font-size: 13px; color: var(--muted); margin-top: 2px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid { display: grid; gap: 18px; }
+  .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    transition: box-shadow .25s, transform .25s;
+  }
+  .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .card h3 {
+    font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text);
+  }
+  .card p { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+  .card-accent { border-top: 3px solid var(--accent); }
+  .card-accent2 { border-top: 3px solid var(--accent2); }
+  .card-accent3 { border-top: 3px solid var(--accent3); }
+  .card-gold { border-top: 3px solid var(--gold); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent2) 100%);
+    border-radius: 2px;
+  }
+  .tl-item {
+    position: relative; margin-bottom: 28px;
+  }
+  .tl-dot {
+    position: absolute; left: -28px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+    flex-shrink: 0;
+  }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent); letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .tl-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: var(--muted); }
+
+  /* ── TABLE ── */
+  .styled-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 13.5px;
+  }
+  .styled-table th {
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+    color: #fff; padding: 12px 18px;
+    text-align: left; font-size: 12px; font-weight: 600;
+    letter-spacing: .5px; text-transform: uppercase;
+  }
+  .styled-table td {
+    padding: 11px 18px;
+    border-top: 1px solid var(--border);
+    color: var(--text); vertical-align: top;
+  }
+  .styled-table tr:nth-child(even) td { background: var(--surface2); }
+  .styled-table tr:hover td { background: #EEF3FA; }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    background: linear-gradient(135deg, #EEF3FA, #E8ECFF);
+    border: 1px solid #C7D7F5;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 18px;
+  }
+  .highlight h4 {
+    font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 6px;
+  }
+  .highlight p { font-size: 13.5px; color: var(--text); }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg); color: var(--tag-text);
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    margin: 2px;
+  }
+  .tag-purple { background: #F3EEFF; color: var(--accent2); }
+  .tag-teal { background: #E0F8FF; color: var(--accent3); }
+  .tag-gold { background: #FEF9EC; color: #B45309; }
+
+  /* ── PROPERTY GRID ── */
+  .prop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .prop-item {
+    background: var(--surface2);
+    border-radius: 10px; padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .prop-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
+  .prop-value { font-size: 13.5px; font-weight: 500; color: var(--text); }
+
+  /* ── AGENT DIAGRAM ── */
+  .agent-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+  .agent-flow {
+    display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center;
+    margin: 20px 0;
+  }
+  .af-box {
+    background: linear-gradient(135deg, var(--accent), #5B8BFF);
+    color: #fff;
+    padding: 12px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; text-align: center;
+    min-width: 120px;
+  }
+  .af-box.env { background: linear-gradient(135deg, var(--accent2), #9B59D9); }
+  .af-box.sensor { background: linear-gradient(135deg, var(--accent3), #38B2E6); }
+  .af-box.actuator { background: linear-gradient(135deg, var(--gold), #F97316); }
+  .af-arrow {
+    font-size: 20px; color: var(--muted); margin: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── CODE-STYLE ── */
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    color: var(--accent2);
+    line-height: 1.8;
+  }
+
+  /* ── FORMULA ── */
+  .formula {
+    background: var(--surface2);
+    border-left: 4px solid var(--accent);
+    padding: 14px 20px;
+    border-radius: 0 10px 10px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--text);
+    margin: 14px 0;
+  }
+
+  /* ── APPS GRID ── */
+  .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .app-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: box-shadow .25s, transform .25s;
+  }
+  .app-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+  .app-icon { font-size: 32px; margin-bottom: 10px; }
+  .app-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .app-card p { font-size: 12.5px; color: var(--muted); }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 32px;
+    color: var(--muted); font-size: 12.5px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    .hero { padding: 52px 24px 48px; }
+    main { padding: 40px 16px 60px; }
+    .agent-flow { flex-direction: column; }
+    .af-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">AI</span>
+  <a href="#foundations">Foundations</a>
+  <a href="#history">History</a>
+  <a href="#agents">Agents</a>
+  <a href="#rationality">Rationality</a>
+  <a href="#environments">Environments</a>
+  <a href="#structure">Agent Structure</a>
+  <a href="#problem-solving">Problem Solving</a>
+  <a href="#techniques">Techniques</a>
+  <a href="#state-space">State Space</a>
+  <a href="#production">Production Systems</a>
+  <a href="#applications">Applications</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <svg class="brain-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="28" fill="#EEF3FA" stroke="#3A6CF4" stroke-width="1.5"/>
+    <path d="M20 26c0-3 2-6 5-7s6 0 7 3c1-3 4-5 7-4s5 3 5 6c0 4-3 7-7 8l-5 4-5-4c-4-1-7-4-7-8z" fill="#3A6CF4" opacity=".2"/>
+    <path d="M20 26c0-3 2-6 5-7s6 0 7 3c1-3 4-5 7-4s5 3 5 6c0 4-3 7-7 8l-5 4-5-4c-4-1-7-4-7-8z" stroke="#3A6CF4" stroke-width="1.8" fill="none"/>
+    <circle cx="26" cy="38" r="1.5" fill="#7C3AED"/>
+    <circle cx="38" cy="38" r="1.5" fill="#7C3AED"/>
+    <line x1="32" y1="22" x2="32" y2="42" stroke="#3A6CF4" stroke-width="1.2" stroke-dasharray="2 2"/>
+    <circle cx="32" cy="44" r="2" fill="#3A6CF4"/>
+  </svg>
+  <div class="hero-eyebrow">Complete Study Guide</div>
+  <h1>Artificial <em>Intelligence</em></h1>
+  <p>From foundational theory to real-world applications — a structured visual reference for understanding how intelligent systems are designed and built.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">Foundations &amp; History</span>
+    <span class="hero-chip">Agents &amp; Environments</span>
+    <span class="hero-chip">Rationality</span>
+    <span class="hero-chip">Problem Solving</span>
+    <span class="hero-chip">State Space Search</span>
+    <span class="hero-chip">Production Systems</span>
+    <span class="hero-chip">Applications</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- ═══════════════════════════════════ FOUNDATIONS ══════════════════════════════════ -->
+  <section class="section" id="foundations">
+    <div class="section-header">
+      <div class="section-icon" style="background:#EEF3FA;">🧠</div>
+      <div>
+        <div class="section-title">Foundations of Artificial Intelligence</div>
+        <div class="section-subtitle">What AI is, what it aims to do, and its core disciplines</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>Definition</h4>
+      <p>Artificial Intelligence is the science and engineering of making machines that can perform tasks that would require intelligence if done by humans — including reasoning, learning, planning, perception, and language understanding.</p>
+    </div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent">
+        <h3>🎯 Goals of AI</h3>
+        <p>Build systems that <strong>think</strong> or <strong>act</strong> either <em>humanly</em> (mimicking human cognition) or <em>rationally</em> (optimally, according to logical principles). These four orientations — think humanly, act humanly, think rationally, act rationally — define the spectrum of AI research.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>🔬 Contributing Disciplines</h3>
+        <p>AI draws from <strong>Mathematics</strong> (logic, probability), <strong>Philosophy</strong> (reasoning, ethics), <strong>Neuroscience</strong> (brain models), <strong>Psychology</strong> (cognition), <strong>Linguistics</strong> (language), <strong>Computer Science</strong> (algorithms), and <strong>Control Theory</strong> (feedback systems).</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>⚙️ Core Capabilities</h3>
+        <p>Natural language processing, knowledge representation, automated reasoning, machine learning, computer vision, robotics, and planning are the principal capability areas that modern AI systems address.</p>
+      </div>
+      <div class="card card-gold">
+        <h3>📐 Turing Test</h3>
+        <p>Proposed by Alan Turing in 1950, the <strong>Turing Test</strong> asks: can a machine converse so naturally that a human evaluator cannot distinguish it from a person? It remains a philosophical benchmark, though modern AI increasingly transcends it in narrow domains.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ HISTORY ══════════════════════════════════ -->
+  <section class="section" id="history">
+    <div class="section-header">
+      <div class="section-icon" style="background:#F3EEFF;">📜</div>
+      <div>
+        <div class="section-title">History of Artificial Intelligence</div>
+        <div class="section-subtitle">Key milestones from formal logic to modern deep learning</div>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1943</div>
+        <div class="tl-title">McCulloch &amp; Pitts — Neural Net Model</div>
+        <div class="tl-desc">First mathematical model of a neuron, laying the biological and mathematical basis for neural networks and machine learning.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1950</div>
+        <div class="tl-title">Alan Turing — "Computing Machinery and Intelligence"</div>
+        <div class="tl-desc">Introduced the Turing Test and the central question: "Can machines think?" This paper established AI as a legitimate scientific inquiry.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1956</div>
+        <div class="tl-title">Dartmouth Conference — Birth of AI as a Field</div>
+        <div class="tl-desc">John McCarthy coined the term "Artificial Intelligence." Researchers including Minsky, Shannon, and Simon gathered to formalise the discipline.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1958–1969</div>
+        <div class="tl-title">Early Programs &amp; Enthusiasm</div>
+        <div class="tl-desc">Newell &amp; Simon's General Problem Solver (GPS), McCarthy's LISP programming language, and early theorem provers showed early promise.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1974–1980</div>
+        <div class="tl-title">First AI Winter</div>
+        <div class="tl-desc">Funding cuts followed unrealised promises. Limitations in hardware, combinatorial explosion, and overhyped expectations led to disillusionment.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1980s</div>
+        <div class="tl-title">Expert Systems Boom</div>
+        <div class="tl-desc">Rule-based expert systems (XCON, MYCIN) proved commercially valuable, reigniting industrial and academic interest in AI.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1987–1993</div>
+        <div class="tl-title">Second AI Winter</div>
+        <div class="tl-desc">Expert systems proved brittle and expensive to maintain. The AI market collapsed again, forcing research toward more rigorous probabilistic methods.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">1997</div>
+        <div class="tl-title">Deep Blue Defeats Kasparov</div>
+        <div class="tl-desc">IBM's chess engine defeated world champion Garry Kasparov, demonstrating the power of search algorithms combined with domain knowledge.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">2006–2012</div>
+        <div class="tl-title">Deep Learning Renaissance</div>
+        <div class="tl-desc">Hinton, LeCun, and Bengio revived neural networks with deep architectures. AlexNet (2012) won ImageNet by a large margin, catalysing the modern deep learning era.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot"></div>
+        <div class="tl-year">2016–Present</div>
+        <div class="tl-title">Modern AI — Foundation Models &amp; LLMs</div>
+        <div class="tl-desc">AlphaGo, GPT series, DALL·E, and large language models transformed AI from narrow tools to broad reasoning systems capable of language, code, vision, and beyond.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ AGENTS ══════════════════════════════════ -->
+  <section class="section" id="agents">
+    <div class="section-header">
+      <div class="section-icon" style="background:#E0F8FF;">🤖</div>
+      <div>
+        <div class="section-title">Intelligent Agents &amp; Environments</div>
+        <div class="section-subtitle">The agent–environment interaction model at the core of AI</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>What is an Intelligent Agent?</h4>
+      <p>An <strong>agent</strong> is anything that perceives its environment through <strong>sensors</strong> and acts upon it through <strong>actuators</strong>. Humans perceive via eyes, ears, and skin; act via hands and voice. Software agents perceive via data streams and act via API calls or file writes.</p>
+    </div>
+
+    <div class="agent-diagram">
+      <h3 style="font-size:15px;font-weight:600;margin-bottom:6px;">The Agent–Environment Cycle</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Perception → Reasoning → Action → New State</p>
+      <div class="agent-flow">
+        <div class="af-box env">Environment<br><small style="opacity:.8;font-size:11px;">World / Task</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box sensor">Sensors<br><small style="opacity:.8;font-size:11px;">Percepts</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box" style="background:linear-gradient(135deg,#3A6CF4,#5B8BFF)">Agent<br><small style="opacity:.8;font-size:11px;">Decision / Logic</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box actuator">Actuators<br><small style="opacity:.8;font-size:11px;">Actions</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box env">Environment<br><small style="opacity:.8;font-size:11px;">(Updated)</small></div>
+      </div>
+    </div>
+
+    <br>
+    <div class="card-grid card-grid-2" style="margin-top:16px;">
+      <div class="card card-accent">
+        <h3>Percept &amp; Percept Sequence</h3>
+        <p>A <strong>percept</strong> is the agent's current sensory input at any moment. The complete history of everything the agent has perceived is the <strong>percept sequence</strong>. An agent's behavior is a function from percept sequence to action.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Agent Function vs Agent Program</h3>
+        <p>The <strong>agent function</strong> is the abstract mathematical mapping: percept sequence → action. The <strong>agent program</strong> is the concrete implementation running on hardware — the physical instantiation of the function.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ RATIONALITY ══════════════════════════════════ -->
+  <section class="section" id="rationality">
+    <div class="section-header">
+      <div class="section-icon" style="background:#FEF9EC;">⚖️</div>
+      <div>
+        <div class="section-title">The Concept of Rationality</div>
+        <div class="section-subtitle">What it means to act optimally given knowledge and resources</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>Rational Agent</h4>
+      <p>A <strong>rational agent</strong> selects actions that <em>maximise expected performance</em> given what it has perceived so far and what it knows about the world. Rationality is not the same as omniscience — it means doing the best possible with available information.</p>
+    </div>
+
+    <div class="formula">
+      Rational Action = argmax<sub>a</sub> E[Performance Measure | percept sequence, agent's knowledge, available actions]
+    </div>
+
+    <div class="card-grid card-grid-3">
+      <div class="card card-accent">
+        <h3>🏆 Performance Measure</h3>
+        <p>An external standard that evaluates an agent's success. For a vacuum cleaner, it might be: amount of dirt cleaned per unit energy. It must be defined by the designer, not the agent itself.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>📚 Prior Knowledge</h3>
+        <p>What the agent knows about the environment before acting — domain knowledge built in at design time. This guides exploration and helps interpret percepts.</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>🔍 Rationality vs Omniscience</h3>
+        <p>An <strong>omniscient</strong> agent knows outcomes in advance. A <strong>rational</strong> agent only maximises expected outcomes. Rationality is achievable; omniscience is not. Rational agents must also explore and learn.</p>
+      </div>
+    </div>
+
+    <br>
+    <table class="styled-table">
+      <thead>
+        <tr><th>Concept</th><th>Description</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Omniscience</strong></td><td>Knows the actual outcome of every action</td><td>Knowing a coin will land heads before flipping</td></tr>
+        <tr><td><strong>Rationality</strong></td><td>Maximises expected outcome given knowledge</td><td>Choosing the statistically best route, not the guaranteed best</td></tr>
+        <tr><td><strong>Autonomy</strong></td><td>Learning from percepts rather than relying solely on prior knowledge</td><td>A chess agent improving by playing games</td></tr>
+        <tr><td><strong>Performance Measure</strong></td><td>Objective criterion for evaluating agent success</td><td>Score, distance, time, cost, accuracy</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════════════════ ENVIRONMENTS ══════════════════════════════════ -->
+  <section class="section" id="environments">
+    <div class="section-header">
+      <div class="section-icon" style="background:#E0F8FF;">🌐</div>
+      <div>
+        <div class="section-title">Nature of Environments (PEAS Framework)</div>
+        <div class="section-subtitle">Classifying environments by their properties</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>PEAS Framework</h4>
+      <p>Every agent design starts with defining: <strong>P</strong>erformance measure, <strong>E</strong>nvironment, <strong>A</strong>ctuators, <strong>S</strong>ensors — the four dimensions that specify what the agent must do and in what context.</p>
+    </div>
+
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 14px;">Environment Properties</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent">
+        <h3>Fully Observable vs Partially Observable</h3>
+        <p><strong>Fully observable:</strong> sensors give complete access to the environment state (e.g., chess board). <strong>Partially observable:</strong> some state is hidden (e.g., card games, real-world driving with limited sensor range).</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Single Agent vs Multi-Agent</h3>
+        <p><strong>Single-agent:</strong> only one agent acts (e.g., puzzle solving). <strong>Multi-agent:</strong> multiple agents interact — can be <em>competitive</em> (chess, auctions) or <em>cooperative</em> (multi-robot coordination).</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>Deterministic vs Stochastic</h3>
+        <p><strong>Deterministic:</strong> the next state is fully determined by the current state and action (e.g., a maze). <strong>Stochastic:</strong> uncertainty exists in outcomes (e.g., weather forecasting, robotic manipulation).</p>
+      </div>
+      <div class="card card-gold">
+        <h3>Episodic vs Sequential</h3>
+        <p><strong>Episodic:</strong> each episode is independent; past actions do not affect future ones (e.g., image classification). <strong>Sequential:</strong> current decisions affect future situations (e.g., chess, driving).</p>
+      </div>
+      <div class="card card-accent">
+        <h3>Static vs Dynamic</h3>
+        <p><strong>Static:</strong> environment does not change while the agent deliberates (e.g., crossword). <strong>Dynamic:</strong> the environment can change during the agent's decision making (e.g., real-time trading, driving).</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Discrete vs Continuous</h3>
+        <p><strong>Discrete:</strong> finite number of distinct states and actions (e.g., chess). <strong>Continuous:</strong> states and actions are real-valued (e.g., robot arm control, autonomous driving).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ STRUCTURE ══════════════════════════════════ -->
+  <section class="section" id="structure">
+    <div class="section-header">
+      <div class="section-icon" style="background:#F3EEFF;">🏗️</div>
+      <div>
+        <div class="section-title">Structure of Agents</div>
+        <div class="section-subtitle">Four canonical agent architectures</div>
+      </div>
+    </div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent" style="position:relative;">
+        <span style="position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;background:var(--accent);color:#fff;padding:3px 9px;border-radius:20px;">Type 1</span>
+        <h3>📋 Simple Reflex Agent</h3>
+        <p>Acts only on the <strong>current percept</strong>, ignoring history. Uses condition–action rules: <em>"If dirty → suck; if location A → move right."</em> Works only in fully observable environments. Very limited — has no memory.</p>
+        <div class="mono" style="margin-top:10px;">if percept == condition:<br>&nbsp;&nbsp;&nbsp;return action</div>
+      </div>
+      <div class="card card-accent2" style="position:relative;">
+        <span style="position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;background:var(--accent2);color:#fff;padding:3px 9px;border-radius:20px;">Type 2</span>
+        <h3>🗺️ Model-Based Reflex Agent</h3>
+        <p>Maintains an <strong>internal model</strong> of the world, updating its state based on percept history. Can handle partial observability by tracking what it can't currently sense. More robust than simple reflex.</p>
+      </div>
+      <div class="card card-accent3" style="position:relative;">
+        <span style="position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;background:var(--accent3);color:#fff;padding:3px 9px;border-radius:20px;">Type 3</span>
+        <h3>🎯 Goal-Based Agent</h3>
+        <p>Considers <strong>goal states</strong> and uses search and planning to find action sequences that lead to them. More flexible — can handle changing goals. Requires reasoning about the future, not just the present.</p>
+      </div>
+      <div class="card card-gold" style="position:relative;">
+        <span style="position:absolute;top:16px;right:16px;font-size:10px;font-weight:700;background:var(--gold);color:#fff;padding:3px 9px;border-radius:20px;">Type 4</span>
+        <h3>📊 Utility-Based Agent</h3>
+        <p>Uses a <strong>utility function</strong> to assign numeric value to states, enabling tradeoffs between goals. Selects actions that maximise expected utility — can balance competing objectives like speed vs safety.</p>
+      </div>
+    </div>
+
+    <br>
+    <div class="card" style="border-top:3px solid #6B7280;margin-top:4px;">
+      <h3>🤖 Learning Agent</h3>
+      <p style="max-width:700px;">A higher-order architecture that includes a <strong>performance element</strong> (the agent's acting component), a <strong>critic</strong> (evaluates performance against a standard), a <strong>learning element</strong> (modifies the performance element based on feedback), and a <strong>problem generator</strong> (suggests exploratory actions to improve future learning). Learning agents can start with minimal knowledge and improve over time.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ PROBLEM SOLVING ══════════════════════════════════ -->
+  <section class="section" id="problem-solving">
+    <div class="section-header">
+      <div class="section-icon" style="background:#FEF9EC;">🔎</div>
+      <div>
+        <div class="section-title">Problem-Solving Agents &amp; Formulation</div>
+        <div class="section-subtitle">How agents define and search for solutions</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>Problem-Solving Agent</h4>
+      <p>A goal-based agent that formulates a problem as a search task, finds a sequence of actions to reach the goal, and executes that plan. It deliberates before acting — suitable for deterministic, observable, discrete environments.</p>
+    </div>
+
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 14px;">Five Components of a Problem</h3>
+    <div class="card-grid card-grid-3">
+      <div class="card card-accent">
+        <h3>1. Initial State</h3>
+        <p>The starting state of the agent. For a navigation problem, this is the agent's current city. For 8-puzzle, it's the scrambled tile arrangement.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>2. Actions (Operators)</h3>
+        <p>The set of actions available to the agent in any state. Formally a function: <em>Actions(s)</em> returns all actions applicable in state <em>s</em>.</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>3. Transition Model</h3>
+        <p>Defines the result of applying an action: <em>Result(s, a) = s'</em>. Together with the initial state, this determines the <em>state space</em>.</p>
+      </div>
+      <div class="card card-gold">
+        <h3>4. Goal Test</h3>
+        <p>A predicate that checks whether a given state is a goal state. Can be explicit (e.g., state == Bucharest) or implicit (e.g., no tiles out of place).</p>
+      </div>
+      <div class="card card-accent">
+        <h3>5. Path Cost</h3>
+        <p>A numeric cost assigned to each path (sequence of actions). Enables the agent to find not just any solution, but an <strong>optimal</strong> one with minimum cost.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Solution &amp; Optimality</h3>
+        <p>A <strong>solution</strong> is an action sequence from initial to goal state. An <strong>optimal solution</strong> has the lowest path cost among all solutions.</p>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">Well-Known Toy Problems</h3>
+    <table class="styled-table">
+      <thead>
+        <tr><th>Problem</th><th>State Space</th><th>Operators</th><th>Goal</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>8-Puzzle</strong></td><td>9!/2 = 181,440 states</td><td>Slide tile Up/Down/Left/Right</td><td>Tiles in order 1–8</td></tr>
+        <tr><td><strong>8-Queens</strong></td><td>64<sup>8</sup> placements</td><td>Place queen on board</td><td>No two queens attack each other</td></tr>
+        <tr><td><strong>Travelling Salesman</strong></td><td>(n-1)!/2 tours</td><td>Visit next city</td><td>Minimum-cost complete tour</td></tr>
+        <tr><td><strong>Route Finding</strong></td><td>Map cities &amp; roads</td><td>Drive from city to city</td><td>Reach destination city</td></tr>
+        <tr><td><strong>Cryptarithmetic</strong></td><td>Digit assignments</td><td>Assign digit to letter</td><td>Arithmetic equation holds</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════════════════ TECHNIQUES ══════════════════════════════════ -->
+  <section class="section" id="techniques">
+    <div class="section-header">
+      <div class="section-icon" style="background:#EEF3FA;">⚡</div>
+      <div>
+        <div class="section-title">AI Techniques, Problem Types &amp; Characteristics</div>
+        <div class="section-subtitle">Search strategies, heuristics, and complexity classifications</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:14px;">Uninformed (Blind) Search Strategies</h3>
+    <div class="card-grid card-grid-3">
+      <div class="card card-accent">
+        <h3>Breadth-First Search (BFS)</h3>
+        <p>Expands shallowest unexpanded node. Complete and optimal (uniform cost). Time/Space: <strong>O(b<sup>d</sup>)</strong> — poor for large depths.</p>
+        <div style="margin-top:8px;"><span class="tag">Complete</span><span class="tag">Optimal</span></div>
+      </div>
+      <div class="card card-accent2">
+        <h3>Depth-First Search (DFS)</h3>
+        <p>Expands deepest node first. Not complete (infinite paths) or optimal. Space: <strong>O(bm)</strong> — memory-efficient but may go down infinite branches.</p>
+        <div style="margin-top:8px;"><span class="tag-purple tag">Not Complete</span><span class="tag-purple tag">Not Optimal</span></div>
+      </div>
+      <div class="card card-accent3">
+        <h3>Uniform Cost Search</h3>
+        <p>Expands node with lowest <em>path cost g(n)</em>. Optimal for non-negative step costs. Equivalent to BFS when all costs are equal.</p>
+        <div style="margin-top:8px;"><span class="tag">Complete</span><span class="tag">Optimal</span></div>
+      </div>
+      <div class="card card-gold">
+        <h3>Iterative Deepening DFS</h3>
+        <p>Combines DFS space efficiency with BFS completeness. Runs DFS with depth limit 0, 1, 2… until goal is found. Space: <strong>O(bd)</strong>.</p>
+        <div style="margin-top:8px;"><span class="tag">Complete</span><span class="tag">Optimal</span></div>
+      </div>
+      <div class="card card-accent">
+        <h3>Bidirectional Search</h3>
+        <p>Runs two simultaneous searches — one forward from start, one backward from goal — meeting in the middle. Reduces time to <strong>O(b<sup>d/2</sup>)</strong>.</p>
+        <div style="margin-top:8px;"><span class="tag">Complete</span><span class="tag">Optimal</span></div>
+      </div>
+      <div class="card card-accent2">
+        <h3>Depth-Limited Search</h3>
+        <p>DFS with a maximum depth limit <em>l</em>. Incomplete if the goal is beyond depth <em>l</em>. Solves the infinite-path problem of DFS when depth bound is known.</p>
+        <div style="margin-top:8px;"><span class="tag-purple tag">Incomplete</span></div>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 14px;">Informed (Heuristic) Search</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent">
+        <h3>🌟 Greedy Best-First Search</h3>
+        <p>Uses heuristic <em>h(n)</em> — estimated cost to goal — to expand the most promising node. Fast but not optimal or complete. Can get stuck in loops.</p>
+        <div class="formula" style="margin-top:10px;">f(n) = h(n)</div>
+      </div>
+      <div class="card card-accent2">
+        <h3>⭐ A* Search</h3>
+        <p>Combines path cost and heuristic: evaluates nodes by <em>f(n) = g(n) + h(n)</em>. With an <strong>admissible</strong> heuristic (never overestimates), A* is complete and optimal. The gold standard of heuristic search.</p>
+        <div class="formula" style="margin-top:10px;">f(n) = g(n) + h(n)</div>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 14px;">Problem Types</h3>
+    <table class="styled-table">
+      <thead>
+        <tr><th>Type</th><th>Characteristic</th><th>Example Technique</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Single-state problem</strong></td><td>Fully observable, deterministic</td><td>Standard search algorithms</td></tr>
+        <tr><td><strong>Multiple-state problem</strong></td><td>Partially observable, deterministic</td><td>Belief state search</td></tr>
+        <tr><td><strong>Contingency problem</strong></td><td>Partially observable, non-deterministic</td><td>AND-OR tree search</td></tr>
+        <tr><td><strong>Exploration problem</strong></td><td>Unknown state space</td><td>Online search, reinforcement learning</td></tr>
+        <tr><td><strong>Constraint Satisfaction</strong></td><td>Variables with domain constraints</td><td>Backtracking, arc consistency</td></tr>
+        <tr><td><strong>Adversarial problem</strong></td><td>Competing agent in environment</td><td>Minimax, Alpha-Beta pruning</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════════════════ STATE SPACE ══════════════════════════════════ -->
+  <section class="section" id="state-space">
+    <div class="section-header">
+      <div class="section-icon" style="background:#E0F8FF;">🗺️</div>
+      <div>
+        <div class="section-title">State Space Search</div>
+        <div class="section-subtitle">Navigating the graph of all possible world configurations</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>State Space</h4>
+      <p>A <strong>state space</strong> is a graph where each <em>node</em> represents a possible world configuration and each <em>directed edge</em> represents applying an operator. Problem solving is path finding in this graph from the initial state to a goal state.</p>
+    </div>
+
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent">
+        <h3>Formal Definition</h3>
+        <p>A state space is a tuple <strong>(S, A, T, s₀, G)</strong> where: <em>S</em> = set of states, <em>A</em> = set of actions, <em>T</em> = transition function, <em>s₀</em> = initial state, <em>G</em> = goal states. A solution is a path in this graph.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Search Tree vs Search Graph</h3>
+        <p>A <strong>search tree</strong> expands nodes without tracking visited states (may revisit). A <strong>search graph</strong> (explored set) tracks visited nodes to avoid cycles — essential for loopy state spaces.</p>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin-bottom:12px;">Search Algorithm Performance Metrics</h3>
+    <div class="prop-grid">
+      <div class="prop-item"><div class="prop-label">Completeness</div><div class="prop-value">Finds a solution if one exists</div></div>
+      <div class="prop-item"><div class="prop-label">Optimality</div><div class="prop-value">Finds the least-cost solution</div></div>
+      <div class="prop-item"><div class="prop-label">Time Complexity</div><div class="prop-value">Nodes generated during search</div></div>
+      <div class="prop-item"><div class="prop-label">Space Complexity</div><div class="prop-value">Maximum nodes in memory</div></div>
+      <div class="prop-item"><div class="prop-label">Branching Factor (b)</div><div class="prop-value">Max successors of any node</div></div>
+      <div class="prop-item"><div class="prop-label">Depth (d)</div><div class="prop-value">Depth of shallowest goal</div></div>
+      <div class="prop-item"><div class="prop-label">Max Depth (m)</div><div class="prop-value">Maximum depth of search space</div></div>
+      <div class="prop-item"><div class="prop-label">Heuristic h(n)</div><div class="prop-value">Estimated cost to goal from n</div></div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 12px;">Heuristic Properties</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent3">
+        <h3>Admissibility</h3>
+        <p>A heuristic is <strong>admissible</strong> if it never overestimates the true cost to the goal: <em>h(n) ≤ h*(n)</em>. An admissible heuristic guarantees A* optimality. Example: straight-line distance in map navigation.</p>
+      </div>
+      <div class="card card-gold">
+        <h3>Consistency (Monotonicity)</h3>
+        <p>A heuristic is <strong>consistent</strong> if for every node n and successor n': <em>h(n) ≤ cost(n, n') + h(n')</em>. Consistency implies admissibility and ensures A* never revisits nodes on the optimal path.</p>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 12px;">Local Search Methods</h3>
+    <div class="card-grid card-grid-3">
+      <div class="card card-accent">
+        <h3>Hill Climbing</h3>
+        <p>Moves to the best immediate neighbour; no backtracking. Fast but gets stuck in <em>local maxima</em>, <em>plateaus</em>, and <em>ridges</em>. Random restarts help escape local optima.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Simulated Annealing</h3>
+        <p>Allows occasional "bad" moves with probability <em>e<sup>−ΔE/T</sup></em>. Temperature T decreases over time (cooling schedule). Can escape local optima; convergence guaranteed under ideal schedule.</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>Genetic Algorithms</h3>
+        <p>Population-based search using <em>selection</em>, <em>crossover</em>, and <em>mutation</em> operators inspired by natural evolution. Effective for complex optimisation with large, irregular search spaces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ PRODUCTION SYSTEMS ══════════════════════════════════ -->
+  <section class="section" id="production">
+    <div class="section-header">
+      <div class="section-icon" style="background:#FEF9EC;">⚙️</div>
+      <div>
+        <div class="section-title">Production Systems &amp; Characteristics</div>
+        <div class="section-subtitle">Rule-based architectures for knowledge representation and reasoning</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <h4>What is a Production System?</h4>
+      <p>A <strong>production system</strong> is a model of computation built around <em>condition–action rules</em> (productions). It is the foundation of expert systems and models human cognitive processes as described by Newell and Simon's work on problem solving.</p>
+    </div>
+
+    <div class="card-grid card-grid-3">
+      <div class="card card-accent">
+        <h3>📦 Production Memory</h3>
+        <p>The <strong>rule base</strong> — a set of if–then rules. Each rule has a <em>left-hand side (LHS)</em> specifying conditions and a <em>right-hand side (RHS)</em> specifying actions to perform when conditions match.</p>
+        <div class="mono" style="margin-top:10px;">IF &lt;condition&gt;<br>THEN &lt;action&gt;</div>
+      </div>
+      <div class="card card-accent2">
+        <h3>🗄️ Working Memory</h3>
+        <p>The <strong>data store</strong> holding current world state, facts, and partial results. Rules fire when their LHS patterns match elements in working memory; actions modify working memory.</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>🔄 Inference Engine</h3>
+        <p>The <strong>control mechanism</strong> that: (1) matches rule conditions to working memory (pattern matching), (2) selects which rule to fire (conflict resolution), and (3) executes the rule's action (act).</p>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 14px;">Recognize–Act Cycle</h3>
+    <div class="agent-diagram" style="padding:20px;">
+      <div class="agent-flow">
+        <div class="af-box" style="background:linear-gradient(135deg,#3A6CF4,#5B8BFF)">Working Memory<br><small style="opacity:.8;font-size:11px;">Current Facts</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box sensor">Match Phase<br><small style="opacity:.8;font-size:11px;">Find Matching Rules</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box env">Conflict Set<br><small style="opacity:.8;font-size:11px;">Eligible Rules</small></div>
+        <div class="af-arrow">→</div>
+        <div class="af-box actuator">Select &amp; Fire<br><small style="opacity:.8;font-size:11px;">Conflict Resolution</small></div>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 14px;">Characteristics of Production Systems</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent">
+        <h3>Modularity</h3>
+        <p>Each production rule is <em>independent</em>. Adding, removing, or modifying one rule does not require changing others — making knowledge bases easier to maintain and extend.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>Uniformity</h3>
+        <p>All knowledge is represented in the same if–then format. This simplicity makes rule bases easy to inspect, debug, and explain — a key advantage for expert systems transparency.</p>
+      </div>
+      <div class="card card-accent3">
+        <h3>Natural Knowledge Representation</h3>
+        <p>Rules closely mirror how domain experts articulate knowledge: "If the patient has fever and cough, suspect flu." This makes knowledge acquisition from experts more intuitive.</p>
+      </div>
+      <div class="card card-gold">
+        <h3>Separability of Knowledge &amp; Control</h3>
+        <p>The <em>rule base</em> (domain knowledge) is cleanly separated from the <em>inference engine</em> (control strategy). The same engine can be used for different rule bases — enabling reuse.</p>
+      </div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 12px;">Conflict Resolution Strategies</h3>
+    <div class="prop-grid">
+      <div class="prop-item"><div class="prop-label">Recency</div><div class="prop-value">Prefer rules matching most recently added facts</div></div>
+      <div class="prop-item"><div class="prop-label">Specificity</div><div class="prop-value">Prefer rules with more conditions (more specific)</div></div>
+      <div class="prop-item"><div class="prop-label">Priority</div><div class="prop-value">Assign explicit salience to rules</div></div>
+      <div class="prop-item"><div class="prop-label">First Match</div><div class="prop-value">Fire the first applicable rule (ordered rules)</div></div>
+      <div class="prop-item"><div class="prop-label">Refractoriness</div><div class="prop-value">Don't fire same rule on same data twice</div></div>
+      <div class="prop-item"><div class="prop-label">Random</div><div class="prop-value">Random selection from conflict set</div></div>
+    </div>
+
+    <br>
+    <h3 style="font-size:15px;font-weight:600;margin:20px 0 12px;">Forward vs Backward Chaining</h3>
+    <div class="card-grid card-grid-2">
+      <div class="card card-accent">
+        <h3>→ Forward Chaining (Data-Driven)</h3>
+        <p>Starts from <strong>known facts</strong> in working memory and fires rules whose conditions match, generating new facts until a goal is reached or no rules apply. Used in monitoring and alerting systems.</p>
+      </div>
+      <div class="card card-accent2">
+        <h3>← Backward Chaining (Goal-Driven)</h3>
+        <p>Starts from the <strong>goal</strong> and works backwards, identifying which rules could establish it, then verifying their conditions recursively. Used in diagnostic systems and Prolog-style logic programming.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ APPLICATIONS ══════════════════════════════════ -->
+  <section class="section" id="applications">
+    <div class="section-header">
+      <div class="section-icon" style="background:#F3EEFF;">🚀</div>
+      <div>
+        <div class="section-title">Applications of Artificial Intelligence</div>
+        <div class="section-subtitle">Where AI has transformed industries and everyday life</div>
+      </div>
+    </div>
+
+    <div class="apps-grid">
+      <div class="app-card">
+        <div class="app-icon">🏥</div>
+        <h3>Healthcare &amp; Medicine</h3>
+        <p>Medical imaging diagnosis, drug discovery, clinical decision support, patient outcome prediction, and robotic surgery assistance.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🚗</div>
+        <h3>Autonomous Vehicles</h3>
+        <p>Self-driving cars using computer vision, sensor fusion, path planning, and real-time decision making in complex traffic environments.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">💬</div>
+        <h3>Natural Language Processing</h3>
+        <p>Machine translation, sentiment analysis, chatbots, question answering, text summarisation, and large language models.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🎮</div>
+        <h3>Game Playing</h3>
+        <p>AlphaGo, AlphaZero, and OpenAI Five demonstrated superhuman performance in Go, Chess, Shogi, and Dota 2 through deep reinforcement learning.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🔒</div>
+        <h3>Cybersecurity</h3>
+        <p>Intrusion detection, malware classification, anomaly detection, network threat analysis, and automated incident response.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">💰</div>
+        <h3>Finance &amp; Trading</h3>
+        <p>Algorithmic trading, credit scoring, fraud detection, portfolio optimisation, risk assessment, and robo-advisors.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🔬</div>
+        <h3>Scientific Research</h3>
+        <p>Protein structure prediction (AlphaFold), materials discovery, climate modelling, particle physics analysis, and genomics.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🛒</div>
+        <h3>Recommendation Systems</h3>
+        <p>Netflix, Spotify, Amazon, and YouTube use collaborative filtering and deep learning to personalise content at massive scale.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🤖</div>
+        <h3>Robotics &amp; Automation</h3>
+        <p>Industrial robots, warehouse automation, surgical robots, agricultural drones, and service robots for delivery and care.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🎨</div>
+        <h3>Creative AI</h3>
+        <p>Image generation (DALL·E, Midjourney), music composition, video synthesis, style transfer, and AI-assisted design tools.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">📚</div>
+        <h3>Education</h3>
+        <p>Intelligent tutoring systems, adaptive learning platforms, automated grading, personalised curricula, and learning analytics.</p>
+      </div>
+      <div class="app-card">
+        <div class="app-icon">🌏</div>
+        <h3>Smart Cities &amp; IoT</h3>
+        <p>Traffic management, energy optimisation, predictive maintenance, air quality monitoring, and urban planning support.</p>
+      </div>
+    </div>
+
+    <br>
+    <div class="highlight" style="background:linear-gradient(135deg,#F3EEFF,#EEF3FA);">
+      <h4>AI Ethical Considerations</h4>
+      <p>As AI systems become more powerful, challenges around <strong>bias &amp; fairness</strong>, <strong>transparency &amp; explainability</strong>, <strong>privacy</strong>, <strong>accountability</strong>, <strong>job displacement</strong>, and <strong>safety alignment</strong> are central concerns for researchers, policymakers, and society. Responsible AI development requires embedding these concerns from the earliest design stages.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Artificial Intelligence — Complete Reference Guide &nbsp;|&nbsp; Foundations through Applications</p>
+  <p style="margin-top:6px;opacity:.6;">Topics: Foundations · History · Agents · Rationality · Environments · Problem Solving · AI Techniques · State Space · Production Systems · Applications</p>
+</footer>
+
+</body>
+</html>

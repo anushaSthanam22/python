@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artificial Intelligence Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #F7F9FC;
+    --surface:   #FFFFFF;
+    --surface2:  #EEF3FA;
+    --accent:    #3A6CF4;
+    --accent2:   #7C3AED;
+    --accent3:   #0EA5C9;
+    --correct:   #059669;
+    --correct-bg:#ECFDF5;
+    --correct-bd:#6EE7B7;
+    --wrong:     #DC2626;
+    --wrong-bg:  #FEF2F2;
+    --wrong-bd:  #FCA5A5;
+    --neutral-bd:#DDE3F0;
+    --text:      #1A1F36;
+    --muted:     #6B7280;
+    --radius:    14px;
+    --shadow:    0 2px 14px rgba(58,108,244,0.08);
+    --shadow-lg: 0 8px 40px rgba(58,108,244,0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #EEF3FA 0%, #E8ECFF 55%, #F0F5FF 100%);
+    padding: 52px 24px 44px;
+    text-align: center;
+    border-bottom: 1px solid var(--neutral-bd);
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 65% 60% at 50% 0%, rgba(58,108,244,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff; font-size: 11px; font-weight: 600;
+    letter-spacing: 1.8px; text-transform: uppercase;
+    padding: 5px 16px; border-radius: 40px; margin-bottom: 18px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    line-height: 1.1; color: var(--text); margin-bottom: 12px;
+  }
+  header h1 em { font-style: italic; color: var(--accent); }
+  header p { color: var(--muted); font-size: 15px; max-width: 480px; margin: 0 auto 24px; }
+  .header-meta {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: var(--surface); border: 1px solid var(--neutral-bd);
+    padding: 6px 16px; border-radius: 40px; font-size: 12.5px;
+    font-weight: 500; color: var(--text); box-shadow: var(--shadow);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(247,249,252,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--neutral-bd);
+    padding: 10px 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .progress-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .progress-track {
+    flex: 1; height: 7px; background: var(--surface2);
+    border-radius: 40px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 40px;
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+  .progress-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 500;
+    color: var(--accent); white-space: nowrap;
+  }
+
+  /* ── QUIZ LAYOUT ── */
+  main { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--neutral-bd);
+    border-radius: var(--radius);
+    padding: 28px 28px 22px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow);
+    transition: box-shadow .25s;
+  }
+  .question-card:hover { box-shadow: var(--shadow-lg); }
+
+  .q-meta {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  }
+  .q-num {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 11px; border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .q-topic {
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .8px;
+  }
+
+  .q-text {
+    font-size: 15.5px; font-weight: 500; color: var(--text);
+    margin-bottom: 18px; line-height: 1.6;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: grid; gap: 9px; }
+  .option {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--neutral-bd);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color .18s, background .18s, transform .12s;
+    background: var(--bg);
+    user-select: none;
+  }
+  .option:hover:not(.locked) {
+    border-color: var(--accent);
+    background: #F0F4FF;
+    transform: translateX(3px);
+  }
+  .option.selected:not(.locked) {
+    border-color: var(--accent);
+    background: #EEF3FA;
+  }
+  .option.correct {
+    border-color: var(--correct-bd);
+    background: var(--correct-bg);
+  }
+  .option.wrong {
+    border-color: var(--wrong-bd);
+    background: var(--wrong-bg);
+  }
+  .option.locked { cursor: default; }
+
+  .opt-key {
+    width: 24px; height: 24px; border-radius: 6px;
+    background: var(--surface2); border: 1.5px solid var(--neutral-bd);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    flex-shrink: 0; margin-top: 1px;
+    transition: background .18s, border-color .18s, color .18s;
+  }
+  .option.correct .opt-key { background: var(--correct); border-color: var(--correct); color: #fff; }
+  .option.wrong   .opt-key { background: var(--wrong);   border-color: var(--wrong);   color: #fff; }
+  .option.selected:not(.locked):not(.correct):not(.wrong) .opt-key {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+
+  .opt-text { font-size: 13.5px; color: var(--text); line-height: 1.55; padding-top: 2px; }
+
+  /* ── EXPLANATION ── */
+  .explanation {
+    display: none;
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 13px; line-height: 1.65;
+  }
+  .explanation.show { display: block; }
+  .explanation.correct-exp {
+    background: var(--correct-bg);
+    border: 1px solid var(--correct-bd);
+    color: #065F46;
+  }
+  .explanation.wrong-exp {
+    background: var(--wrong-bg);
+    border: 1px solid var(--wrong-bd);
+    color: #7F1D1D;
+  }
+  .explanation strong { font-weight: 700; }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-btn {
+    display: block; width: 100%; max-width: 360px;
+    margin: 36px auto 0;
+    padding: 15px 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-size: 15px; font-weight: 600;
+    border: none; border-radius: 12px; cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    box-shadow: 0 4px 20px rgba(58,108,244,0.3);
+    transition: opacity .2s, transform .15s, box-shadow .2s;
+  }
+  .submit-btn:hover { opacity: .92; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(58,108,244,0.36); }
+  .submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+  /* ── SCORE CARD ── */
+  #score-section { display: none; }
+  #score-section.show { display: block; }
+
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--neutral-bd);
+    border-radius: 20px;
+    padding: 44px 36px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    margin-top: 48px; margin-bottom: 40px;
+  }
+  .score-ring {
+    width: 130px; height: 130px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .score-ring circle {
+    fill: none; stroke-width: 10;
+  }
+  .score-ring .track { stroke: var(--surface2); }
+  .score-ring .fill  { stroke: url(#scoreGrad); stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1); }
+  .ring-label {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .ring-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 34px; line-height: 1; color: var(--text);
+  }
+  .ring-den { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+  .score-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px; margin-bottom: 8px; color: var(--text);
+  }
+  .score-subtitle { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+  .score-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    margin-bottom: 28px;
+  }
+  .score-stat {
+    background: var(--surface2); border-radius: 12px; padding: 16px 10px;
+    border: 1px solid var(--neutral-bd);
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px; color: var(--accent); display: block;
+  }
+  .stat-num.green { color: var(--correct); }
+  .stat-num.red   { color: var(--wrong); }
+  .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+
+  .score-band {
+    display: inline-block; padding: 8px 22px;
+    border-radius: 40px; font-size: 14px; font-weight: 600;
+    margin-bottom: 28px;
+  }
+  .band-excellent { background: #ECFDF5; color: var(--correct); border: 1.5px solid var(--correct-bd); }
+  .band-good      { background: #EEF3FA; color: var(--accent);  border: 1.5px solid #A5C0F7; }
+  .band-average   { background: #FEF9EC; color: #B45309;        border: 1.5px solid #FDE68A; }
+  .band-below     { background: var(--wrong-bg); color: var(--wrong); border: 1.5px solid var(--wrong-bd); }
+
+  .retry-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; border: none; border-radius: 12px;
+    padding: 14px 40px; font-size: 14px; font-weight: 600;
+    font-family: 'Sora', sans-serif; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(58,108,244,0.28);
+    transition: opacity .2s, transform .15s;
+  }
+  .retry-btn:hover { opacity: .9; transform: translateY(-2px); }
+
+  /* ── REVIEW TABLE ── */
+  .review-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; margin-bottom: 16px; color: var(--text);
+  }
+  .review-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    background: var(--surface); border: 1px solid var(--neutral-bd);
+    border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow); font-size: 13px;
+  }
+  .review-table th {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff; padding: 11px 16px; text-align: left;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .review-table td {
+    padding: 10px 16px; border-top: 1px solid var(--neutral-bd);
+    vertical-align: top; line-height: 1.5;
+  }
+  .review-table tr:nth-child(even) td { background: var(--surface2); }
+  .badge-correct { color: var(--correct); font-weight: 700; }
+  .badge-wrong   { color: var(--wrong);   font-weight: 700; }
+
+  /* ── SKIPPED WARNING ── */
+  .skip-warn {
+    background: #FEF9EC; border: 1.5px solid #FDE68A;
+    border-radius: 10px; padding: 14px 18px;
+    font-size: 13px; color: #92400E;
+    margin-top: 20px; display: none; text-align: center;
+  }
+  .skip-warn.show { display: block; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 540px) {
+    .score-grid { grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .question-card { padding: 20px 16px 16px; }
+    .score-card { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-badge">Test Your Knowledge</div>
+  <h1>Artificial <em>Intelligence</em> Quiz</h1>
+  <p>25 questions spanning foundations, agents, search, production systems, and applications.</p>
+  <div class="header-meta">
+    <span class="meta-pill">📝 25 Questions</span>
+    <span class="meta-pill">⏱ No Time Limit</span>
+    <span class="meta-pill">💡 Explanations Included</span>
+    <span class="meta-pill">📊 Score at the End</span>
+  </div>
+</header>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <span class="progress-label">Progress</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-score" id="progressText">0 / 25</span>
+</div>
+
+<main>
+  <div id="quiz-container"></div>
+
+  <div class="skip-warn" id="skipWarn">
+    ⚠️ You haven't answered all questions. Please answer every question before submitting.
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz &amp; See Results →</button>
+
+  <!-- SCORE SECTION -->
+  <div id="score-section">
+    <div class="score-card">
+      <svg style="position:absolute;width:0;height:0;">
+        <defs>
+          <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3A6CF4"/>
+            <stop offset="100%" stop-color="#7C3AED"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="score-ring">
+        <svg viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="42"/>
+          <circle class="fill" id="ringCircle" cx="50" cy="50" r="42"
+            stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+        </svg>
+        <div class="ring-label">
+          <span class="ring-num" id="ringNum">0</span>
+          <span class="ring-den" id="ringDen">/ 25</span>
+        </div>
+      </div>
+      <div class="score-title" id="scoreTitle">—</div>
+      <div class="score-subtitle" id="scoreSubtitle">—</div>
+      <div class="score-band" id="scoreBand">—</div>
+      <div class="score-grid">
+        <div class="score-stat">
+          <span class="stat-num green" id="statCorrect">0</span>
+          <span class="stat-label">Correct</span>
+        </div>
+        <div class="score-stat">
+          <span class="stat-num red" id="statWrong">0</span>
+          <span class="stat-label">Wrong</span>
+        </div>
+        <div class="score-stat">
+          <span class="stat-num" id="statPct">0%</span>
+          <span class="stat-label">Score</span>
+        </div>
+      </div>
+      <button class="retry-btn" onclick="retryQuiz()">🔄 Retry Quiz</button>
+    </div>
+
+    <div class="review-title">Question Review</div>
+    <table class="review-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Question</th>
+          <th>Your Answer</th>
+          <th>Correct Answer</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody id="reviewBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+const questions = [
+  {
+    topic: "Foundations",
+    q: "Who coined the term 'Artificial Intelligence' and in which year?",
+    opts: ["Alan Turing — 1950", "John McCarthy — 1956", "Marvin Minsky — 1960", "Claude Shannon — 1948"],
+    ans: 1,
+    exp: "John McCarthy coined the term 'Artificial Intelligence' at the Dartmouth Conference in 1956, which is widely considered the founding moment of AI as an academic discipline."
+  },
+  {
+    topic: "Foundations",
+    q: "The Turing Test, proposed in 1950, primarily evaluates a machine's ability to:",
+    opts: ["Solve mathematical equations faster than humans", "Exhibit intelligent behavior indistinguishable from a human in conversation", "Beat a human at chess", "Recognise objects in images"],
+    ans: 1,
+    exp: "The Turing Test evaluates whether a machine's conversational responses are indistinguishable from a human's. It is a behavioral benchmark for natural language intelligence, not specific tasks like chess."
+  },
+  {
+    topic: "Foundations",
+    q: "Which of the following is NOT one of the four main approaches to AI as defined by Russell & Norvig?",
+    opts: ["Acting rationally", "Thinking humanly", "Computing maximally", "Acting humanly"],
+    ans: 2,
+    exp: "Russell & Norvig identify four orientations: Thinking humanly, Acting humanly, Thinking rationally, and Acting rationally. 'Computing maximally' is not one of them — AI is not about raw computation speed."
+  },
+  {
+    topic: "History",
+    q: "What caused the first 'AI Winter' in the mid-1970s?",
+    opts: ["Lack of computing hardware", "Unrealised promises, funding cuts, and combinatorial explosion problems", "A virus that destroyed all AI research data", "The invention of expert systems"],
+    ans: 1,
+    exp: "The first AI Winter was triggered by overhyped expectations colliding with real limitations: hardware constraints, inability to scale search-based methods (combinatorial explosion), and reports like the Lighthill Report led to severe funding cuts."
+  },
+  {
+    topic: "History",
+    q: "Which AI system defeated world chess champion Garry Kasparov in 1997?",
+    opts: ["AlphaGo", "Stockfish", "Deep Blue", "Watson"],
+    ans: 2,
+    exp: "IBM's Deep Blue defeated Garry Kasparov in a 6-game match in 1997, becoming the first computer to win a match against a reigning world chess champion under standard time controls."
+  },
+  {
+    topic: "Agents & Environments",
+    q: "An agent perceives its environment through ______ and acts upon it through ______.",
+    opts: ["Actuators; sensors", "Sensors; actuators", "Inputs; outputs", "Memory; processors"],
+    ans: 1,
+    exp: "By definition, an agent uses sensors to perceive the environment and actuators to act upon it. For a robot: cameras are sensors, motors are actuators. For a software agent: data streams are sensors, API calls are actuators."
+  },
+  {
+    topic: "Agents & Environments",
+    q: "The complete history of all inputs an agent has received is called the:",
+    opts: ["Agent function", "Percept sequence", "Performance measure", "State space"],
+    ans: 1,
+    exp: "A percept is the current sensory input. The percept sequence is the full history of all percepts received by the agent. The agent function maps any percept sequence to an action."
+  },
+  {
+    topic: "Rationality",
+    q: "A rational agent is best described as one that:",
+    opts: ["Always has complete information about the world", "Selects actions that maximise expected performance given its percepts and knowledge", "Never makes mistakes", "Uses the most computational resources available"],
+    ans: 1,
+    exp: "Rationality means doing the best given what you know — maximising expected performance based on available percepts and knowledge. It does NOT require omniscience (complete information) or infallibility."
+  },
+  {
+    topic: "Rationality",
+    q: "Which of the following correctly distinguishes 'rationality' from 'omniscience'?",
+    opts: ["Omniscience means acting optimally; rationality means knowing all outcomes", "Rationality maximises expected outcomes with available info; omniscience knows actual outcomes in advance", "They are the same concept", "Rationality requires perfect memory; omniscience does not"],
+    ans: 1,
+    exp: "An omniscient agent knows the actual result of every action before taking it — impossible in reality. A rational agent only maximises expected performance based on available information, which is achievable."
+  },
+  {
+    topic: "Environments",
+    q: "In a chess game, two players compete and each player's move is visible to both. This environment is best classified as:",
+    opts: ["Fully observable, single-agent, deterministic, sequential", "Fully observable, multi-agent (competitive), deterministic, sequential", "Partially observable, multi-agent, stochastic, episodic", "Fully observable, single-agent, stochastic, episodic"],
+    ans: 1,
+    exp: "Chess is fully observable (the whole board is visible), multi-agent and competitive (two players), deterministic (moves have exact outcomes), and sequential (each move affects future states). It is NOT single-agent or stochastic."
+  },
+  {
+    topic: "Environments",
+    q: "A poker-playing agent cannot see opponents' cards. This makes the environment:",
+    opts: ["Fully observable", "Partially observable", "Non-deterministic", "Episodic"],
+    ans: 1,
+    exp: "Partially observable environments hide parts of the state from the agent's sensors. In poker, opponents' cards are hidden, so the agent cannot fully observe the world state."
+  },
+  {
+    topic: "Environments",
+    q: "An environment that does NOT change while the agent is deliberating is called:",
+    opts: ["Continuous", "Stochastic", "Static", "Episodic"],
+    ans: 2,
+    exp: "A static environment remains unchanged while the agent is deciding what to do. A dynamic environment can change during deliberation (e.g., real-time traffic). Crossword puzzles are static; driving is dynamic."
+  },
+  {
+    topic: "Agent Structure",
+    q: "Which type of agent maintains an internal model of the world to handle partial observability?",
+    opts: ["Simple reflex agent", "Model-based reflex agent", "Goal-based agent", "Utility-based agent"],
+    ans: 1,
+    exp: "A model-based reflex agent keeps an internal state that tracks parts of the world it cannot currently sense, updating it based on percept history. A simple reflex agent has NO memory and only reacts to the current percept."
+  },
+  {
+    topic: "Agent Structure",
+    q: "A utility-based agent differs from a goal-based agent primarily because it:",
+    opts: ["Uses sensors instead of actuators", "Uses a numeric utility function to choose among multiple goals and tradeoffs", "Has no knowledge of the environment", "Only works in fully observable environments"],
+    ans: 1,
+    exp: "A goal-based agent simply tries to reach a goal state. A utility-based agent uses a utility function that assigns a numeric value to states, enabling it to balance competing objectives (e.g., speed vs safety) and find the best tradeoff."
+  },
+  {
+    topic: "Agent Structure",
+    q: "Which component of a learning agent evaluates the agent's performance against an external standard?",
+    opts: ["Performance element", "Problem generator", "Critic", "Learning element"],
+    ans: 2,
+    exp: "In a learning agent: the Critic evaluates behavior against the performance standard; the Learning element modifies the performance element based on critic feedback; the Problem generator suggests new experiences; the Performance element acts in the environment."
+  },
+  {
+    topic: "Problem Solving",
+    q: "The five components of a formally defined search problem are: initial state, actions, transition model, goal test, and:",
+    opts: ["Heuristic function", "Path cost", "Search tree", "Agent type"],
+    ans: 1,
+    exp: "The five components are: (1) Initial state, (2) Actions (operators), (3) Transition model (Result function), (4) Goal test, and (5) Path cost. The path cost enables finding OPTIMAL solutions, not just any solution."
+  },
+  {
+    topic: "Problem Solving",
+    q: "In the 8-puzzle problem, the state space contains approximately how many states?",
+    opts: ["512", "40,320 (8!)", "181,440 (9!/2)", "362,880 (9!)"],
+    ans: 2,
+    exp: "The 8-puzzle has 9 tiles (including the blank), giving 9! = 362,880 arrangements. However, only half of these are reachable from any given starting state, so the reachable state space is 9!/2 = 181,440 states."
+  },
+  {
+    topic: "AI Techniques",
+    q: "Breadth-First Search (BFS) is guaranteed to find the optimal solution when:",
+    opts: ["The heuristic is admissible", "All step costs are equal (or non-decreasing with depth)", "The state space is infinite", "The branching factor is greater than 10"],
+    ans: 1,
+    exp: "BFS finds the shallowest goal, which is optimal only when all step costs are equal. For varying costs, Uniform Cost Search (which expands by path cost) is needed for optimality. Admissible heuristics relate to A*, not BFS."
+  },
+  {
+    topic: "AI Techniques",
+    q: "A* search is guaranteed to find an optimal solution if the heuristic h(n) is:",
+    opts: ["Consistent and overestimates true cost", "Admissible (never overestimates the true cost to goal)", "Always equal to zero", "Greater than g(n)"],
+    ans: 1,
+    exp: "A* is optimal when the heuristic is admissible — it never overestimates h*(n), the true cost to reach the goal. An admissible heuristic may underestimate or be exact. Overestimating breaks the optimality guarantee."
+  },
+  {
+    topic: "AI Techniques",
+    q: "Which search strategy uses the evaluation function f(n) = g(n) + h(n)?",
+    opts: ["Greedy best-first search", "Uniform cost search", "A* search", "Iterative deepening search"],
+    ans: 2,
+    exp: "A* search uses f(n) = g(n) + h(n), where g(n) is the actual cost from start to n, and h(n) is the heuristic estimate from n to goal. Greedy best-first only uses h(n); Uniform cost only uses g(n)."
+  },
+  {
+    topic: "State Space Search",
+    q: "Hill climbing search can get permanently stuck in which of the following situations?",
+    opts: ["Optimal solution states", "Local maxima, plateaus, and ridges", "Goal states with negative cost", "Fully observable environments"],
+    ans: 1,
+    exp: "Hill climbing has no backtracking. It gets stuck in: local maxima (better than neighbors but not global best), plateaus (flat regions with no uphill move), and ridges (narrow peak where every lateral step goes down)."
+  },
+  {
+    topic: "Production Systems",
+    q: "In a production system, the 'working memory' holds:",
+    opts: ["All condition-action rules", "Current world state, facts, and intermediate results", "The conflict resolution strategy", "The agent's long-term goals"],
+    ans: 1,
+    exp: "Working memory (also called global database) stores the current state of the world, known facts, and partial results. Production memory stores the rules. The inference engine performs matching and fires rules."
+  },
+  {
+    topic: "Production Systems",
+    q: "The 'Recognize-Act' cycle of a production system proceeds in which order?",
+    opts: ["Act → Match → Select → Repeat", "Match → Conflict Resolution → Act → Repeat", "Select → Match → Act → Repeat", "Act → Select → Match → Repeat"],
+    ans: 1,
+    exp: "The Recognize-Act cycle is: (1) Match — find all rules whose LHS conditions match working memory; (2) Conflict Resolution — select one rule from the conflict set; (3) Act — execute the rule's RHS action; then repeat."
+  },
+  {
+    topic: "Production Systems",
+    q: "A medical expert system starts from a patient's symptoms and fires rules to conclude a diagnosis. This reasoning mode is called:",
+    opts: ["Backward chaining", "Forward chaining", "Bidirectional search", "Constraint propagation"],
+    ans: 1,
+    exp: "Forward chaining is data-driven: start from known facts (symptoms) and fire applicable rules to derive new facts until a conclusion (diagnosis) is reached. Backward chaining starts from a goal (suspected diagnosis) and works backward to verify it."
+  },
+  {
+    topic: "Applications",
+    q: "Google DeepMind's AlphaFold made a breakthrough in which scientific domain using AI?",
+    opts: ["Climate change modelling", "Protein structure prediction", "Drug synthesis chemistry", "Quantum computing simulation"],
+    ans: 1,
+    exp: "AlphaFold (DeepMind, 2020–2021) achieved near-experimental accuracy in predicting 3D protein structures from amino acid sequences — a 50-year-old grand challenge in biology. It has since predicted structures for over 200 million proteins."
+  }
+];
+
+let userAnswers = new Array(questions.length).fill(null);
+let submitted = false;
+
+function buildQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `qcard-${i}`;
+
+    const optHTML = q.opts.map((o, j) => `
+      <div class="option" id="opt-${i}-${j}" onclick="selectOption(${i}, ${j})">
+        <div class="opt-key">${['A','B','C','D'][j]}</div>
+        <div class="opt-text">${o}</div>
+      </div>`).join('');
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">Q${i + 1}</span>
+        <span class="q-topic">${q.topic}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options" id="opts-${i}">${optHTML}</div>
+      <div class="explanation" id="exp-${i}"></div>`;
+    container.appendChild(card);
+  });
+  updateProgress();
+}
+
+function selectOption(qi, oi) {
+  if (submitted) return;
+  // Clear previous selection visuals
+  const opts = document.querySelectorAll(`#opts-${qi} .option`);
+  opts.forEach(o => o.classList.remove('selected'));
+  // Mark selected
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('selected');
+  userAnswers[qi] = oi;
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = userAnswers.filter(a => a !== null).length;
+  const pct = (answered / questions.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${answered} / ${questions.length}`;
+}
+
+function submitQuiz() {
+  if (submitted) return;
+  const unanswered = userAnswers.some(a => a === null);
+  if (unanswered) {
+    document.getElementById('skipWarn').classList.add('show');
+    // scroll to first unanswered
+    const idx = userAnswers.indexOf(null);
+    document.getElementById(`qcard-${idx}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.getElementById('skipWarn').classList.remove('show');
+  submitted = true;
+
+  let correct = 0;
+  questions.forEach((q, i) => {
+    const ua = userAnswers[i];
+    const opts = document.querySelectorAll(`#opts-${i} .option`);
+    opts.forEach(o => { o.classList.add('locked'); o.classList.remove('selected'); });
+
+    // Mark correct option always
+    opts[q.ans].classList.add('correct');
+    // If wrong, also mark user's pick
+    if (ua === q.ans) {
+      correct++;
+    } else {
+      opts[ua].classList.add('wrong');
+    }
+
+    // Show explanation
+    const expEl = document.getElementById(`exp-${i}`);
+    if (ua === q.ans) {
+      expEl.className = 'explanation show correct-exp';
+      expEl.innerHTML = `✅ <strong>Correct!</strong> ${q.exp}`;
+    } else {
+      expEl.className = 'explanation show wrong-exp';
+      expEl.innerHTML = `❌ <strong>Incorrect.</strong> The correct answer is <strong>${q.opts[q.ans]}</strong>. ${q.exp}`;
+    }
+  });
+
+  showScore(correct);
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').textContent = '✓ Submitted';
+  updateProgress();
+
+  // Scroll to score after brief pause
+  setTimeout(() => {
+    document.getElementById('score-section').scrollIntoView({ behavior: 'smooth' });
+  }, 400);
+}
+
+function showScore(correct) {
+  const total = questions.length;
+  const wrong = total - correct;
+  const pct = Math.round((correct / total) * 100);
+
+  // Ring animation
+  const circumference = 2 * Math.PI * 42; // 263.9
+  const offset = circumference - (correct / total) * circumference;
+  const ring = document.getElementById('ringCircle');
+  ring.style.strokeDashoffset = offset;
+
+  document.getElementById('ringNum').textContent = correct;
+  document.getElementById('ringDen').textContent = `/ ${total}`;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statPct').textContent = pct + '%';
+
+  let title, subtitle, bandClass, bandText;
+  if (pct >= 88) {
+    title = "Outstanding!"; subtitle = "You have a strong command of AI concepts.";
+    bandClass = "band-excellent"; bandText = "🏆 Excellent — " + pct + "%";
+  } else if (pct >= 72) {
+    title = "Well Done!"; subtitle = "Solid understanding with a few gaps to revisit.";
+    bandClass = "band-good"; bandText = "👍 Good — " + pct + "%";
+  } else if (pct >= 52) {
+    title = "Keep Going!"; subtitle = "You've got the basics — review the explanations above.";
+    bandClass = "band-average"; bandText = "📘 Average — " + pct + "%";
+  } else {
+    title = "Room to Grow"; subtitle = "Revisit the AI guide and try again. You've got this!";
+    bandClass = "band-below"; bandText = "📖 Needs Review — " + pct + "%";
+  }
+
+  document.getElementById('scoreTitle').textContent = title;
+  document.getElementById('scoreSubtitle').textContent = subtitle;
+  const band = document.getElementById('scoreBand');
+  band.className = 'score-band ' + bandClass;
+  band.textContent = bandText;
+
+  // Build review table
+  const tbody = document.getElementById('reviewBody');
+  tbody.innerHTML = questions.map((q, i) => {
+    const ua = userAnswers[i];
+    const isCorrect = ua === q.ans;
+    return `<tr>
+      <td><strong>Q${i+1}</strong></td>
+      <td>${q.q}</td>
+      <td>${q.opts[ua]}</td>
+      <td>${q.opts[q.ans]}</td>
+      <td class="${isCorrect ? 'badge-correct' : 'badge-wrong'}">${isCorrect ? '✓ Correct' : '✗ Wrong'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('score-section').classList.add('show');
+}
+
+function retryQuiz() {
+  userAnswers = new Array(questions.length).fill(null);
+  submitted = false;
+  document.getElementById('score-section').classList.remove('show');
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').textContent = 'Submit Quiz & See Results →';
+  document.getElementById('skipWarn').classList.remove('show');
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
